@@ -1,1 +1,681 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Molly Meller: PR &amp; Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1510;
+      --warm-mid: #7a6a55;
+      --accent: #c8503a;
+      --accent-light: #e8927f;
+      --rule: #d4c9b5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+    .hero-left {
+      padding: 6rem 3rem 4rem 3rem;
+      display: flex; flex-direction: column; justify-content: center;
+      border-right: 1px solid var(--rule);
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-bio {
+      font-size: 1.05rem;
+      color: var(--warm-mid);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 0.75rem 1.8rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.25s;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background: var(--ink);
+      color: var(--cream);
+      border: 1.5px solid var(--ink);
+    }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-right {
+      padding: 6rem 3rem 4rem 3rem;
+      display: flex; flex-direction: column; justify-content: center;
+      background: var(--ink);
+      opacity: 0; animation: fadeIn 1s 0.5s forwards;
+    }
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+    }
+    .stat-item {}
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--cream);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-number span { color: var(--accent-light); }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8a7d6a;
+    }
+    .hero-rule {
+      width: 40px; height: 1px;
+      background: var(--accent-light);
+      margin: 3rem 0;
+    }
+    .hero-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #b8a890;
+      line-height: 1.6;
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      margin-bottom: 3.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--warm-mid); }
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0 3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-sidebar {}
+    .about-sidebar .section-label { margin-bottom: 2rem; }
+    .skills-category {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    .skills-list { list-style: none; }
+    .skills-list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.88rem;
+      color: var(--warm-mid);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .skills-list li::before {
+      content: '';
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .about-content p {
+      font-size: 1.05rem;
+      color: #4a3f30;
+      margin-bottom: 1.5rem;
+      max-width: 640px;
+    }
+    .about-content p strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* ─── EXPERIENCE ─── */
+    #experience { background: var(--ink); color: var(--cream); }
+    #experience .section-title { color: var(--cream); }
+    #experience .section-title em { color: var(--accent-light); }
+    #experience .section-label { color: var(--accent-light); }
+
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: #3a3028;
+    }
+    .timeline-item {
+      padding-left: 2.5rem;
+      padding-bottom: 3.5rem;
+      position: relative;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .timeline-item.animate { opacity: 0; transform: translateX(-20px); }
+    .timeline-item.animate.visible { opacity: 1; transform: translateX(0); }
+    .timeline-dot {
+      position: absolute;
+      left: -4px; top: 0.45rem;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-meta {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8a7d6a;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--cream);
+      margin-bottom: 0.25rem;
+    }
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+    }
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: #9a8d7a;
+      max-width: 580px;
+      line-height: 1.75;
+      list-style: none;
+      padding: 0;
+    }
+    .timeline-desc li {
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: 0.4rem;
+    }
+    .timeline-desc li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ─── SKILLS GRID ─── */
+    #skills { background: #f0ebe0; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5px;
+      background: var(--rule);
+      border: 1.5px solid var(--rule);
+    }
+    .skill-card {
+      background: var(--cream);
+      padding: 2.5rem;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s, transform 0.5s, background 0.2s;
+    }
+    .skill-card.animate { opacity: 0; transform: translateY(20px); }
+    .skill-card.animate.visible { opacity: 1; transform: translateY(0); }
+    .skill-card:hover { background: var(--ink); }
+    .skill-card:hover .skill-card-title,
+    .skill-card:hover .skill-card-body { color: var(--cream); }
+    .skill-card:hover .skill-icon { color: var(--accent-light); }
+    .skill-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      transition: color 0.2s;
+    }
+    .skill-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      transition: color 0.2s;
+    }
+    .skill-card-body {
+      font-size: 0.88rem;
+      color: var(--warm-mid);
+      line-height: 1.7;
+      transition: color 0.2s;
+    }
+
+    /* ─── EDUCATION ─── */
+    #education {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .edu-item {
+      padding: 4rem 3rem;
+      border-right: 1px solid var(--rule);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .edu-item:last-child { border-right: none; }
+    .edu-item.animate { opacity: 0; transform: translateY(20px); }
+    .edu-item.animate.visible { opacity: 1; transform: translateY(0); }
+    .edu-degree {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .edu-school {
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .edu-detail {
+      font-size: 0.9rem;
+      color: var(--warm-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--ink);
+      color: var(--cream);
+      text-align: center;
+      padding: 7rem 3rem;
+    }
+    #contact .section-label { color: var(--accent-light); }
+    #contact .section-title { color: var(--cream); margin-bottom: 1.5rem; }
+    #contact .section-title em { color: var(--accent-light); }
+    .contact-sub {
+      font-size: 1rem;
+      color: #8a7d6a;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+    }
+    .contact-links {
+      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 1.5rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--rule);
+      font-size: 0.75rem;
+      color: var(--warm-mid);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 5rem 1.5rem 3rem; }
+      .hero-right { padding: 3rem 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      hr.divider { margin: 0 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 2rem; }
+      #education { grid-template-columns: 1fr; }
+      .edu-item { padding: 3rem 1.5rem; border-right: none; border-bottom: 1px solid var(--rule); }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">Molly Meller</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Account Director · Data Analytics · PR Strategist</p>
+      <h1 class="hero-name">Stories<br>backed by<br><em>data.</em></h1>
+      <p class="hero-bio">
+        Eight years shaping narratives for health, tech, and nonprofit clients — now deepening that work with a master's in Analytics. Based in Portland, Maine.
+      </p>
+      <div class="hero-cta">
+        <a href="#experience" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-number">8<span>+</span></div>
+          <div class="stat-label">Years in PR</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2027</div>
+          <div class="stat-label">Expected Graduation</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3<span>rd</span></div>
+          <div class="stat-label">Ed. PR for Dummies</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">MS<span>.</span></div>
+          <div class="stat-label">Analytics, Northeastern</div>
+        </div>
+      </div>
+      <div class="hero-rule"></div>
+      <p class="hero-quote">"I've always loved stories. That same fascination now guides my work, through data, insight, and strategy."</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-sidebar">
+      <p class="section-label">About</p>
+      <p class="skills-category">Data Analysis &amp; Visualization</p>
+      <ul class="skills-list">
+        <li>R</li>
+        <li>Microsoft Excel</li>
+        <li>Tableau</li>
+        <li>Python</li>
+        <li>Power BI</li>
+        <li>Cision</li>
+        <li>Canva</li>
+        <li>Meltwater</li>
+        <li>MuckRack</li>
+      </ul>
+      <p class="skills-category" style="margin-top: 1.5rem;">Strategic Operations &amp; Communications</p>
+      <ul class="skills-list">
+        <li>Data-Driven Storytelling</li>
+        <li>Content Strategy</li>
+        <li>Executive Thought Leadership</li>
+        <li>Media Relations</li>
+        <li>Crisis Management</li>
+        <li>Client Engagement</li>
+        <li>Team Coordination</li>
+      </ul>
+    </div>
+    <div class="about-content">
+      <h2 class="section-title">Where communications<br>meets <em>analytics.</em></h2>
+      <p>
+        I've always loved stories. As a kid, I could spend hours lost in fantasy novels, exploring new worlds and uncovering meaning through imagination and detail. That same fascination with storytelling guides my professional journey, now through data, insight, and strategy.
+      </p>
+      <p>
+        Over the past eight years, I've built a career in public relations and strategic communications, advancing to an Account Director role leading clients across healthcare, technology, and nonprofit sectors. I've developed a strong foundation in media strategy, executive communications, thought leadership, and brand reputation management, helping organizations shape narratives that build trust and drive measurable impact.
+      </p>
+      <p>
+        As my work evolved, I became increasingly interested in the data behind the stories, analyzing media trends, campaign performance, and audience engagement to inform smarter strategy. That curiosity led me to pursue a Master of Professional Studies in Analytics at Northeastern University with a concentration in Evidence-Based Management, where I'm expanding my technical expertise to complement my communications background. I bring a strong understanding of how to deliver client insights by analyzing trends across the healthcare, tech, and nonprofit sectors, with proficiency in statistical analysis and data visualization, and a proven ability to communicate findings through detailed technical reports.
+      </p>
+      <p>
+        I'm passionate about using data to tell meaningful stories, connecting information to insight and insight to impact. By blending analytical thinking with creative communication, I help organizations uncover what the numbers reveal and translate that into strategies that resonate and deliver results.
+      </p>
+      <p>
+        Outside of work, I volunteer with animal welfare organizations, and I'm a former radio DJ and Station Manager at WSOU 89.5 FM, a Marconi Award-winning radio station. The thread running through all of it? A love for story, craft, and the details that make an audience lean in.
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">A career built on<br><em>earned trust.</em></h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-meta">Jan 2022 to Present</p>
+        <h3 class="timeline-role">Account Director</h3>
+        <p class="timeline-company">Ericho Communications · Fully Remote</p>
+        <ul class="timeline-desc">
+          <li>Lead corporate health, nonprofit, and tech accounts, delivering high-quality client outcomes.</li>
+          <li>Draft data-driven articles, speeches, and talking points increasing client thought leadership.</li>
+          <li>Develop data-driven reports and campaigns to achieve high-level, consistent media results.</li>
+          <li>Analyze industry trends increasing 3rd edition sales of bestseller <em>Public Relations for Dummies</em>.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-meta">July 2020 to Jan 2022</p>
+        <h3 class="timeline-role">Account Supervisor</h3>
+        <p class="timeline-company">5W Public Relations · New York, New York</p>
+        <ul class="timeline-desc">
+          <li>Developed quarterly market analysis reports that strengthened client strategy.</li>
+          <li>Used sentiment and share-of-voice analyses to improve crisis response and reduce backlash.</li>
+          <li>Mentored and oversaw projects for junior stakeholders, streamlining business outcomes.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-meta">Aug 2019 to July 2020</p>
+        <h3 class="timeline-role">Account Executive</h3>
+        <p class="timeline-company">RLM Public Relations · New York, New York</p>
+        <ul class="timeline-desc">
+          <li>Leveraged trend analyses to enhance marketing, media, influencer, and IR campaigns.</li>
+          <li>Crafted weekly research-driven pitches to increase media presence for subject matter experts.</li>
+        </ul>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-meta">May 2017 to Aug 2019</p>
+        <h3 class="timeline-role">Account Executive</h3>
+        <p class="timeline-company">Relativity Ventures · New York, New York</p>
+        <ul class="timeline-desc">
+          <li>Monitored cross-industry media trends to secure high level client media placements.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" style="border-color:#3a3028">
+
+  <!-- SKILLS -->
+  <section id="skills" style="padding: 7rem 0;">
+    <div style="padding: 0 3rem; margin-bottom: 3.5rem;">
+      <p class="section-label">Capabilities</p>
+      <h2 class="section-title">Two disciplines,<br><em>one toolkit.</em></h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">✦</div>
+        <h3 class="skill-card-title">Media Strategy</h3>
+        <p class="skill-card-body">Designing and executing campaigns that land in top-tier outlets. Pitch development, media relations, and editorial positioning.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">◈</div>
+        <h3 class="skill-card-title">Executive Communications</h3>
+        <p class="skill-card-body">Speeches, executive thought leadership, talking points, and content that positions leaders as authoritative voices.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">⬡</div>
+        <h3 class="skill-card-title">Crisis Management</h3>
+        <p class="skill-card-body">Rapid-response communications, sentiment monitoring, and reputation protection across high-stakes situations.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">◉</div>
+        <h3 class="skill-card-title">Data Analysis</h3>
+        <p class="skill-card-body">Statistical modeling, regression analysis, and data exploration using R, Excel, and SQL to surface meaningful insights.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">▣</div>
+        <h3 class="skill-card-title">Data Visualization</h3>
+        <p class="skill-card-body">Translating complex datasets into clear, compelling visuals using Tableau, Power BI, and R Markdown reporting.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">⟡</div>
+        <h3 class="skill-card-title">Brand Reputation</h3>
+        <p class="skill-card-body">Share-of-voice analysis, competitive benchmarking, and long-term narrative strategy to build and protect brand equity.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- EDUCATION -->
+  <section id="education" style="padding: 0;">
+    <div class="edu-item">
+      <p class="section-label">Education</p>
+      <h3 class="edu-degree">Master of Professional Studies, Analytics</h3>
+      <p class="edu-school">Northeastern University · Roux Institute · 2025 to 2027 · GPA 4.0</p>
+      <p class="edu-school" style="color: var(--warm-mid); font-size: 0.8rem; margin-top: -0.6rem; margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: none;">Concentration in Evidence-Based Management</p>
+      <p class="edu-detail">Building technical fluency in R, SQL, statistical modeling, and Tableau alongside existing communications expertise.</p>
+    </div>
+    <div class="edu-item">
+      <p class="section-label">Education</p>
+      <h3 class="edu-degree">Bachelor's, Public Relations</h3>
+      <p class="edu-school">Seton Hall University · 2013–2017 · GPA 3.91</p>
+      <p class="edu-detail">Dean's List every semester. Minor in Music Technology. Station Manager at WSOU 89.5 FM, a Marconi Award-winning radio station. University Academic Scholarship.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's work<br><em>together.</em></h2>
+    <p class="contact-sub">Whether you need a communications strategist, a thought leadership partner, or someone who bridges business intelligence and data analysis with storytelling, I'd love to connect.</p>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/mollymeller" target="_blank" class="btn btn-primary">LinkedIn</a>
+      <a href="/cdn-cgi/l/email-protection#d6beb3babab996bbb9babaafbbb3babab3a4f8b5b9bb" class="btn btn-outline" style="color:var(--cream); border-color:#4a3f35;">Email Me</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Molly Meller</span>
+    <span>Portland, Maine</span>
+  </footer>
+
+  <script>
+    // Add animate class then observe — elements are visible by default as fallback
+    const animatedEls = document.querySelectorAll('.timeline-item, .skill-card, .edu-item');
+    animatedEls.forEach(el => el.classList.add('animate'));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) el.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    animatedEls.forEach(el => observer.observe(el));
+
+    // Stagger skill cards
+    document.querySelectorAll('.skill-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.07}s`;
+    });
+  </script>
