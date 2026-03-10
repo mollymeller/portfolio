@@ -111,12 +111,13 @@
     /* ─── CARDS ─── */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, 280px);
       gap: 1.5px;
       background: var(--cream);
       border: 1.5px solid var(--rule);
+      justify-content: start;
     }
-    .cards-2 { grid-template-columns: repeat(2, 1fr); }
+    .cards-2 { grid-template-columns: repeat(2, 280px); }
     @media (max-width: 900px) {
       .cards, .cards-2, .cards-4 { grid-template-columns: repeat(2, 1fr); }
     }
