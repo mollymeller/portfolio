@@ -111,18 +111,15 @@
     /* ─── CARDS ─── */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1.5px;
-      background: var(--rule);
+      background: var(--cream);
       border: 1.5px solid var(--rule);
     }
-    .cards::after {
-      content: '';
-      background: var(--cream);
-      border: none;
-    }
     .cards-2 { grid-template-columns: repeat(2, 1fr); }
-    .cards-4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 900px) {
+      .cards, .cards-2, .cards-4 { grid-template-columns: repeat(2, 1fr); }
+    }
     .card {
       background: var(--cream);
       padding: 2rem;
@@ -178,7 +175,6 @@
     .work-section.dark .section-heading { color: var(--cream); }
     .work-section.dark .section-desc { color: #8a7d6a; }
     .work-section.dark .cards { background: #1a1510; border-color: #1a1510; }
-    .work-section.dark .cards::after { background: #1a1510; border: none; }
     .work-section.dark .card { background: #231c14; color: var(--cream); }
     .work-section.dark .card:hover { background: var(--accent); }
     .work-section.dark .card-body { color: #9a8d7a; }
@@ -238,7 +234,15 @@
     <p class="section-label">Analytics Projects</p>
     <h2 class="section-heading">Data Analysis &amp; Code</h2>
     <p class="section-desc">R, SQL, and statistical modeling projects from Northeastern's Analytics program and independent work.</p>
-    <div class="cards cards-4">
+    <div class="cards">
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
+        <span class="card-tag">R</span>
+        <h3 class="card-title">Project Title Here</h3>
+        <p class="card-body">Brief description of the project, methods used, and key findings.</p>
+        <span class="card-arrow">View on GitHub →</span>
+      </a>
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
+        <span class="card-tag">R</span>
         <h3 class="card-title">Project Title Here</h3>
         <p class="card-body">Brief description of the project, methods used, and key findings.</p>
         <span class="card-arrow">View on GitHub →</span>
@@ -284,7 +288,7 @@
     <p class="section-label">Media Coverage</p>
     <h2 class="section-heading">Press Rooms</h2>
     <p class="section-desc">Selected press coverage and thought leadership secured for clients across healthcare, tech, and nonprofit sectors.</p>
-    <div class="cards cards-4">
+    <div class="cards">
       <a href="YOUR_PRESS_LINK" target="_blank" class="card">
         <span class="card-tag">Byline</span>
         <h3 class="card-title">Publication or Client Name</h3>
