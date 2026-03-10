@@ -108,83 +108,64 @@
       margin-bottom: 2.5rem;
     }
 
-    /* ─── CARDS ─── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, 280px);
-      gap: 1.5px;
-      background: var(--cream);
-      border: 1.5px solid var(--rule);
-      justify-content: start;
-    }
-    .cards-2 { grid-template-columns: repeat(2, 280px); }
-    @media (max-width: 900px) {
-      .cards, .cards-2, .cards-4 { grid-template-columns: repeat(2, 1fr); }
-    }
-    .card {
-      background: var(--cream);
-      padding: 2rem;
+    /* ─── LIST ITEMS ─── */
+    .list { display: flex; flex-direction: column; }
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--rule);
       text-decoration: none;
       color: var(--ink);
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
+      gap: 2rem;
       transition: background 0.2s;
     }
-    .card:hover { background: var(--ink); }
-    .card:hover .card-title,
-    .card:hover .card-body { color: var(--cream); }
-    .card:hover .card-tag { color: var(--accent-light); border-color: var(--accent-light); }
-    .card:hover .card-arrow { color: var(--accent-light); }
-    .card-tag {
+    .list-item:first-child { border-top: 1px solid var(--rule); }
+    .list-item:hover { background: transparent; }
+    .list-item:hover .list-title { color: var(--accent); }
+    .list-item:hover .list-arrow { color: var(--accent); }
+    .list-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; }
+    .list-tag {
       font-size: 0.68rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--accent);
       border: 1px solid var(--accent);
-      display: inline-block;
       padding: 0.15rem 0.5rem;
       border-radius: 2px;
-      width: fit-content;
-      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      min-width: 80px;
+      text-align: center;
     }
-    .card-title {
+    .list-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       transition: color 0.2s;
     }
-    .card-body {
+    .list-body {
       font-size: 0.88rem;
       color: var(--warm-mid);
-      line-height: 1.65;
-      flex-grow: 1;
-      transition: color 0.2s;
+      flex: 1;
     }
-    .card-arrow {
+    .list-arrow {
       font-size: 0.85rem;
       color: var(--warm-mid);
-      margin-top: 0.5rem;
+      white-space: nowrap;
       transition: color 0.2s;
     }
 
-    /* ─── DARK SECTION ─── */
-    .work-section.dark {
-      background: var(--ink);
+    /* ─── DARK LIST ─── */
+    .work-section.dark .list-item {
+      border-color: #3a3028;
       color: var(--cream);
     }
-    .work-section.dark .section-label { color: var(--accent-light); }
-    .work-section.dark .section-heading { color: var(--cream); }
-    .work-section.dark .section-desc { color: #8a7d6a; }
-    .work-section.dark .cards { background: #1a1510; border-color: #1a1510; }
-    .work-section.dark .card { background: #231c14; color: var(--cream); }
-    .work-section.dark .card:hover { background: var(--accent); }
-    .work-section.dark .card-body { color: #9a8d7a; }
-    .work-section.dark .card-tag { color: var(--accent-light); border-color: var(--accent-light); }
-    .work-section.dark .card-arrow { color: #8a7d6a; }
-    .work-section.dark .card:hover .card-title,
-    .work-section.dark .card:hover .card-body,
-    .work-section.dark .card:hover .card-arrow { color: var(--cream); }
-    .work-section.dark .card:hover .card-tag { color: var(--cream); border-color: var(--cream); }
+    .work-section.dark .list-item:first-child { border-top-color: #3a3028; }
+    .work-section.dark .list-tag { color: var(--accent-light); border-color: var(--accent-light); }
+    .work-section.dark .list-body { color: #9a8d7a; }
+    .work-section.dark .list-arrow { color: #8a7d6a; }
+    .work-section.dark .list-item:hover .list-title { color: var(--accent-light); }
+    .work-section.dark .list-item:hover .list-arrow { color: var(--accent-light); }
 
     /* ─── BACK LINK ─── */
     .back-bar {
@@ -235,30 +216,38 @@
     <p class="section-label">Analytics Projects</p>
     <h2 class="section-heading">Data Analysis &amp; Code</h2>
     <p class="section-desc">R, SQL, and statistical modeling projects from Northeastern's Analytics program and independent work.</p>
-    <div class="cards">
-      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
-        <span class="card-tag">R</span>
-        <h3 class="card-title">Project Title Here</h3>
-        <p class="card-body">Brief description of the project, methods used, and key findings.</p>
-        <span class="card-arrow">View on GitHub →</span>
+    <div class="list">
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">R</span>
+          <h3 class="list-title">Project Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the project, methods used, and key findings.</p>
+        <span class="list-arrow">View on GitHub →</span>
       </a>
-      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
-        <span class="card-tag">R</span>
-        <h3 class="card-title">Project Title Here</h3>
-        <p class="card-body">Brief description of the project, methods used, and key findings.</p>
-        <span class="card-arrow">View on GitHub →</span>
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">R</span>
+          <h3 class="list-title">Project Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the project, methods used, and key findings.</p>
+        <span class="list-arrow">View on GitHub →</span>
       </a>
-      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
-        <span class="card-tag">R</span>
-        <h3 class="card-title">Project Title Here</h3>
-        <p class="card-body">Brief description of the project, methods used, and key findings.</p>
-        <span class="card-arrow">View on GitHub →</span>
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">R</span>
+          <h3 class="list-title">Project Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the project, methods used, and key findings.</p>
+        <span class="list-arrow">View on GitHub →</span>
       </a>
-      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="card">
-        <span class="card-tag">SQL</span>
-        <h3 class="card-title">Project Title Here</h3>
-        <p class="card-body">Brief description of the project, methods used, and key findings.</p>
-        <span class="card-arrow">View on GitHub →</span>
+      <a href="YOUR_GITHUB_REPO_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">SQL</span>
+          <h3 class="list-title">Project Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the project, methods used, and key findings.</p>
+        <span class="list-arrow">View on GitHub →</span>
       </a>
     </div>
   </div>
@@ -268,18 +257,22 @@
     <p class="section-label">Data Visualization</p>
     <h2 class="section-heading">Tableau Dashboards</h2>
     <p class="section-desc">Interactive dashboards and visualizations built in Tableau Public.</p>
-    <div class="cards cards-2">
-      <a href="YOUR_TABLEAU_PUBLIC_LINK" target="_blank" class="card">
-        <span class="card-tag">Tableau</span>
-        <h3 class="card-title">Dashboard Title Here</h3>
-        <p class="card-body">Brief description of the dataset, story, and key insights visualized.</p>
-        <span class="card-arrow">View on Tableau Public →</span>
+    <div class="list">
+      <a href="YOUR_TABLEAU_PUBLIC_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Tableau</span>
+          <h3 class="list-title">Dashboard Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the dataset, story, and key insights visualized.</p>
+        <span class="list-arrow">View on Tableau Public →</span>
       </a>
-      <a href="YOUR_TABLEAU_PUBLIC_LINK" target="_blank" class="card">
-        <span class="card-tag">Tableau</span>
-        <h3 class="card-title">Dashboard Title Here</h3>
-        <p class="card-body">Brief description of the dataset, story, and key insights visualized.</p>
-        <span class="card-arrow">View on Tableau Public →</span>
+      <a href="YOUR_TABLEAU_PUBLIC_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Tableau</span>
+          <h3 class="list-title">Dashboard Title Here</h3>
+        </div>
+        <p class="list-body">Brief description of the dataset, story, and key insights visualized.</p>
+        <span class="list-arrow">View on Tableau Public →</span>
       </a>
     </div>
   </div>
@@ -289,54 +282,70 @@
     <p class="section-label">Media Coverage</p>
     <h2 class="section-heading">Press Rooms</h2>
     <p class="section-desc">Selected press coverage and thought leadership secured for clients across healthcare, tech, and nonprofit sectors.</p>
-    <div class="cards">
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Byline</span>
-        <h3 class="card-title">Publication or Client Name</h3>
-        <p class="card-body">Brief description of the article, topic, and its impact.</p>
-        <span class="card-arrow">Read Article →</span>
+    <div class="list">
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Byline</span>
+          <h3 class="list-title">Publication or Client Name</h3>
+        </div>
+        <p class="list-body">Brief description of the article, topic, and its impact.</p>
+        <span class="list-arrow">Read Article →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Byline</span>
-        <h3 class="card-title">Publication or Client Name</h3>
-        <p class="card-body">Brief description of the article, topic, and its impact.</p>
-        <span class="card-arrow">Read Article →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Byline</span>
+          <h3 class="list-title">Publication or Client Name</h3>
+        </div>
+        <p class="list-body">Brief description of the article, topic, and its impact.</p>
+        <span class="list-arrow">Read Article →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Byline</span>
-        <h3 class="card-title">Publication or Client Name</h3>
-        <p class="card-body">Brief description of the article, topic, and its impact.</p>
-        <span class="card-arrow">Read Article →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Byline</span>
+          <h3 class="list-title">Publication or Client Name</h3>
+        </div>
+        <p class="list-body">Brief description of the article, topic, and its impact.</p>
+        <span class="list-arrow">Read Article →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Commentary</span>
-        <h3 class="card-title">Publication or Client Name</h3>
-        <p class="card-body">Brief description of the commentary, topic, and context.</p>
-        <span class="card-arrow">Read Commentary →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Commentary</span>
+          <h3 class="list-title">Publication or Client Name</h3>
+        </div>
+        <p class="list-body">Brief description of the commentary, topic, and context.</p>
+        <span class="list-arrow">Read Commentary →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Commentary</span>
-        <h3 class="card-title">Publication or Client Name</h3>
-        <p class="card-body">Brief description of the commentary, topic, and context.</p>
-        <span class="card-arrow">Read Commentary →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Commentary</span>
+          <h3 class="list-title">Publication or Client Name</h3>
+        </div>
+        <p class="list-body">Brief description of the commentary, topic, and context.</p>
+        <span class="list-arrow">Read Commentary →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Podcast</span>
-        <h3 class="card-title">Show or Episode Name</h3>
-        <p class="card-body">Brief description of the episode, guest, and topics covered.</p>
-        <span class="card-arrow">Listen →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Podcast</span>
+          <h3 class="list-title">Show or Episode Name</h3>
+        </div>
+        <p class="list-body">Brief description of the episode, guest, and topics covered.</p>
+        <span class="list-arrow">Listen →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Podcast</span>
-        <h3 class="card-title">Show or Episode Name</h3>
-        <p class="card-body">Brief description of the episode, guest, and topics covered.</p>
-        <span class="card-arrow">Listen →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Podcast</span>
+          <h3 class="list-title">Show or Episode Name</h3>
+        </div>
+        <p class="list-body">Brief description of the episode, guest, and topics covered.</p>
+        <span class="list-arrow">Listen →</span>
       </a>
-      <a href="YOUR_PRESS_LINK" target="_blank" class="card">
-        <span class="card-tag">Podcast</span>
-        <h3 class="card-title">Show or Episode Name</h3>
-        <p class="card-body">Brief description of the episode, guest, and topics covered.</p>
-        <span class="card-arrow">Listen →</span>
+      <a href="YOUR_PRESS_LINK" target="_blank" class="list-item">
+        <div class="list-left">
+          <span class="list-tag">Podcast</span>
+          <h3 class="list-title">Show or Episode Name</h3>
+        </div>
+        <p class="list-body">Brief description of the episode, guest, and topics covered.</p>
+        <span class="list-arrow">Listen →</span>
       </a>
     </div>
   </div>
