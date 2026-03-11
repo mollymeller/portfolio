@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Classification | Molly Meller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8; --ink: #1a1510; --warm-mid: #7a6a55;
+      --accent: #c8503a; --accent-light: #e8927f; --rule: #d4c9b5; --code-bg: #1e1a14;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.2rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(245,240,232,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1.1rem; letter-spacing: 0.04em; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    .page-header { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: end; }
+    .page-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 700; }
+    .page-title em { font-style: italic; color: var(--warm-mid); }
+    .page-sub { margin-top: 1.5rem; font-size: 1.05rem; color: var(--warm-mid); max-width: 560px; line-height: 1.8; }
+    .meta-box { background: var(--ink); padding: 2rem; }
+    .meta-item { margin-bottom: 1.5rem; }
+    .meta-item:last-child { margin-bottom: 0; }
+    .meta-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.3rem; }
+    .meta-value { font-size: 0.92rem; color: #b8a890; line-height: 1.6; }
+
+    .project-section { padding: 5rem 3rem; border-bottom: 1px solid var(--rule); }
+    .project-section.dark { background: var(--ink); color: var(--cream); }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .project-section.dark .section-label { color: var(--accent-light); }
+    .section-heading { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .project-section.dark .section-heading { color: var(--cream); }
+    .section-desc { font-size: 0.95rem; color: var(--warm-mid); max-width: 720px; margin-bottom: 2.5rem; line-height: 1.8; }
+    .project-section.dark .section-desc { color: #8a7d6a; }
+
+    /* METRICS TABLE */
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .metrics-card { border: 1px solid #3a3028; padding: 1.75rem; }
+    .metrics-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); margin-bottom: 1rem; }
+    .metrics-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #3a3028; font-size: 0.88rem; }
+    .metrics-row:last-child { border-bottom: none; }
+    .metrics-row-label { color: #9a8d7a; }
+    .metrics-row-value { color: var(--accent-light); font-weight: 500; }
+
+    /* FINDINGS */
+    .finding-block { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid #3a3028; }
+    .finding-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .finding-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); border: 1px solid var(--accent-light); display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 0.75rem; }
+    .finding-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); margin-bottom: 0.75rem; }
+    .finding-text { font-size: 0.92rem; color: #9a8d7a; max-width: 680px; line-height: 1.8; }
+    .finding-stat { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #2a2018; font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent-light); }
+
+    /* VISUALIZATIONS */
+    .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .viz-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+    .viz-item {}
+    .viz-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.5rem; }
+    .viz-caption { font-size: 0.85rem; color: #8a7d6a; margin-top: 0.75rem; line-height: 1.6; }
+    .viz-item img { width: 100%; border: 1px solid #3a3028; }
+    .viz-item.full { grid-column: 1 / -1; }
+    .viz-item.full img { max-width: 600px; display: block; margin: 0 auto; }
+
+    /* CODE */
+    .code-block { margin-bottom: 3rem; }
+    .code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .code-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--ink); }
+    .code-tag { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.15rem 0.5rem; border-radius: 2px; }
+    .code-desc { font-size: 0.9rem; color: var(--warm-mid); margin-bottom: 1rem; max-width: 640px; }
+    pre { background: var(--code-bg); padding: 2rem; overflow-x: auto; border-left: 3px solid var(--accent); }
+    code { font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.8; color: #d4c9b5; }
+    .kw { color: #e8927f; font-weight: 500; } .fn { color: #c8a96e; } .cm { color: #5a5040; font-style: italic; } .st { color: #8fbc8f; } .nm { color: #b8d4e8; }
+
+    .back-bar { padding: 1.5rem 3rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .back-link { text-decoration: none; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-mid); transition: color 0.2s; }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; }
+      .page-header { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; }
+      .metrics-grid, .viz-grid, .viz-grid-3 { grid-template-columns: 1fr; }
+      .viz-item.full { grid-column: auto; }
+      .project-section { padding: 4rem 1.5rem; } .back-bar { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">Molly Meller</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#education">Education</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div>
+      <p class="page-eyebrow">R Project</p>
+      <h1 class="page-title">College Type<br><em>Classification</em></h1>
+      <p class="page-sub">A logistic regression model predicting whether a U.S. college is public or private using student-to-faculty ratio and per-student instructional expenditure, based on a dataset of 777 colleges from a 1995 U.S. News and World Report issue.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-item">
+        <p class="meta-label">Tools</p>
+        <p class="meta-value">R, ggplot2, patchwork, caret, pROC, car</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Methods</p>
+        <p class="meta-value">Logistic Regression, Confusion Matrix, ROC Curve, AUC, VIF, Odds Ratios</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Dataset</p>
+        <p class="meta-value">ISLR College Dataset — 777 U.S. colleges, 18 variables (James et al., 2013)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="project-section">
+    <p class="section-label">Overview</p>
+    <h2 class="section-heading">Research Question</h2>
+    <p class="section-desc">Can institutional metrics accurately predict whether a college is public or private, and which of these variables most effectively distinguish between the two college types? The analysis used student-to-faculty ratio and instructional expenditure per student as predictors, evaluated through a GLM with binomial family.</p>
+    <p class="section-desc" style="margin-bottom:0;">The dataset contains 565 private colleges (~73%) and 212 public colleges (~27%), creating a class imbalance that influenced model evaluation strategy — favoring AUC, sensitivity, and specificity over accuracy alone.</p>
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="project-section dark">
+    <p class="section-label">Results</p>
+    <h2 class="section-heading">Key Findings</h2>
+    <p class="section-desc">Student-to-faculty ratio emerged as the sole significant predictor. The model achieved strong overall performance but showed a systematic bias toward predicting private colleges due to class imbalance.</p>
+
+    <div class="finding-block">
+      <span class="finding-label">EDA</span>
+      <h3 class="finding-title">Public colleges have larger enrollments; private colleges have higher graduation rates and academic selectivity</h3>
+      <p class="finding-text">Public colleges averaged significantly more enrolled students and full-time undergraduates. Private colleges averaged higher graduation rates and a greater percentage of students from the top 10% of their high school class. Private colleges also spent more on instruction per student, while public colleges had higher student-to-faculty ratios — a pattern that proved critical for the model.</p>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Logistic Regression</span>
+      <h3 class="finding-title">Student-to-faculty ratio is significant; instructional expenditure is not</h3>
+      <p class="finding-text">The logistic regression model showed that student-to-faculty ratio was a highly significant predictor (p = 1.03e-14), with higher ratios associated with public colleges. Instructional expenditure per student was not statistically significant (p ≈ 0.44). Odds ratio analysis confirmed that for each one-unit increase in student-to-faculty ratio, the odds of a college being private decrease by approximately 27% (OR ≈ 0.73). VIF values (~1.39 for both) indicated no multicollinearity concern.</p>
+      <div>
+        <span class="finding-stat">S/F Ratio p = 1.03e-14</span>
+        <span class="finding-stat" style="margin-left:1rem;">Expenditure p ≈ 0.44</span>
+        <span class="finding-stat" style="margin-left:1rem;">OR ≈ 0.73</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Model Performance</span>
+      <h3 class="finding-title">Strong accuracy and recall, but low specificity reveals class imbalance bias</h3>
+      <p class="finding-text">The model performed consistently across training and test sets, suggesting good generalization without overfitting. However, specificity remained low in both sets, with over half of public colleges misclassified as private. This reflects the dataset's 73/27 class imbalance, causing the model to default to the majority private class. The AUC of 0.85 indicates strong overall discriminative ability despite this limitation.</p>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Interpretation</span>
+      <h3 class="finding-title">The dataset's source may introduce selection bias beyond class imbalance</h3>
+      <p class="finding-text">The college dataset may not be a reliable source for drawing broad conclusions about public versus private institutions. Journalist Malcolm Gladwell conducted investigative research finding that U.S. News and World Report's college rankings are influenced by selection bias, favoring certain institutions over others based on opinion-based reputation scores. Since this dataset originates from a 1995 U.S. News and World Report issue, it likely reflects those same biases, which may partially explain the dataset's skew toward private colleges. The combination of class imbalance, limited predictor independence, and potential selection bias in the original data source limits the model's reliability for drawing broad conclusions about differences between public and private colleges.</p>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metrics-card">
+        <p class="metrics-card-title">Training Set (n = 545)</p>
+        <div class="metrics-row"><span class="metrics-row-label">Accuracy</span><span class="metrics-row-value">79.82%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Precision</span><span class="metrics-row-value">81.92%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Recall / Sensitivity</span><span class="metrics-row-value">92.68%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Specificity</span><span class="metrics-row-value">45.64%</span></div>
+      </div>
+      <div class="metrics-card">
+        <p class="metrics-card-title">Test Set (n = 232)</p>
+        <div class="metrics-row"><span class="metrics-row-label">Accuracy</span><span class="metrics-row-value">81.04%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Precision</span><span class="metrics-row-value">81.73%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Recall / Sensitivity</span><span class="metrics-row-value">95.27%</span></div>
+        <div class="metrics-row"><span class="metrics-row-label">Specificity</span><span class="metrics-row-value">42.86%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISUALIZATIONS -->
+  <div class="project-section dark">
+    <p class="section-label">Visualizations</p>
+    <h2 class="section-heading">Selected Charts</h2>
+    <p class="section-desc">Three charts from the EDA and model evaluation illustrating college type differences and model performance.</p>
+    <div class="viz-grid">
+      <div class="viz-item">
+        <p class="viz-label">Student Body Metrics by College Type</p>
+        <img src="college-student-metrics.png" alt="Student Body Metrics for Public vs Private Universities" />
+        <p class="viz-caption">Faceted bar charts comparing enrollment, graduation rate, top 10% HS class percentage, and full-time undergraduates between public and private colleges.</p>
+      </div>
+      <div class="viz-item">
+        <p class="viz-label">Key Predictor Distributions</p>
+        <img src="college-key-metrics.png" alt="Distribution of Key Metrics by College Type" />
+        <p class="viz-caption">Box plots of student-to-faculty ratio and instructional expenditure by college type. Student-to-faculty ratio shows clear separation between the two groups, while expenditure shows considerable overlap.</p>
+      </div>
+      <div class="viz-item full">
+        <p class="viz-label">ROC Curve</p>
+        <img src="college-roc.png" alt="ROC Curve for College Type Classification" />
+        <p class="viz-caption">ROC curve for the test set with AUC = 0.85, indicating strong discriminative ability. The model consistently achieves high sensitivity across classification thresholds.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- R CODE -->
+  <div class="project-section">
+    <p class="section-label">Selected Code</p>
+    <h2 class="section-heading">R Code</h2>
+    <p class="section-desc">Key code blocks from the EDA and logistic regression model, including multi-metric visualizations, the GLM, odds ratios, confusion matrix, and ROC curve.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Combined Student Body Metrics Visualization</h3>
+        <span class="code-tag">EDA</span>
+      </div>
+      <p class="code-desc">Creates a faceted bar chart comparing four student body metrics between public and private colleges using pivot_longer for tidy reshaping.</p>
+      <pre><code>college_comparison <span class="kw">&lt;-</span> college <span class="kw">%&gt;%</span>
+  <span class="fn">mutate</span>(private <span class="kw">=</span> <span class="fn">ifelse</span>(private <span class="kw">==</span> <span class="st">"Yes"</span>, <span class="st">"Private"</span>, <span class="st">"Public"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fn">group_by</span>(private) <span class="kw">%&gt;%</span>
+  <span class="fn">summarise</span>(
+    <span class="st">`Enrollment`</span>             <span class="kw">=</span> <span class="fn">mean</span>(enroll),
+    <span class="st">`Graduation Rate (%)`</span>    <span class="kw">=</span> <span class="fn">mean</span>(grad_rate),
+    <span class="st">`Top 10% of HS Class (%)`</span> <span class="kw">=</span> <span class="fn">mean</span>(top10perc),
+    <span class="st">`Full-Time Undergrads`</span>   <span class="kw">=</span> <span class="fn">mean</span>(f_undergrad)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fn">pivot_longer</span>(cols <span class="kw">=</span> <span class="kw">-</span>private, names_to <span class="kw">=</span> <span class="st">"metric"</span>, values_to <span class="kw">=</span> <span class="st">"value"</span>)
+
+<span class="fn">ggplot</span>(college_comparison, <span class="fn">aes</span>(x <span class="kw">=</span> private, y <span class="kw">=</span> value, fill <span class="kw">=</span> private)) <span class="kw">+</span>
+  <span class="fn">geom_bar</span>(stat <span class="kw">=</span> <span class="st">"identity"</span>) <span class="kw">+</span>
+  <span class="fn">facet_wrap</span>(<span class="kw">~</span>metric, scales <span class="kw">=</span> <span class="st">"free_y"</span>, ncol <span class="kw">=</span> <span class="nm">2</span>) <span class="kw">+</span>
+  <span class="fn">labs</span>(title <span class="kw">=</span> <span class="st">"Student Body Metrics for Public vs. Private Universities"</span>,
+       x <span class="kw">=</span> <span class="st">"College Type"</span>, y <span class="kw">=</span> <span class="st">"Average Value"</span>, fill <span class="kw">=</span> <span class="st">"College Type"</span>) <span class="kw">+</span>
+  <span class="fn">scale_fill_manual</span>(values <span class="kw">=</span> <span class="fn">c</span>(<span class="st">"Public"</span> <span class="kw">=</span> <span class="st">"darkorange"</span>, <span class="st">"Private"</span> <span class="kw">=</span> <span class="st">"darkred"</span>)) <span class="kw">+</span>
+  <span class="fn">theme_minimal</span>()</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Logistic Regression Model and Odds Ratios</h3>
+        <span class="code-tag">GLM</span>
+      </div>
+      <p class="code-desc">Fits a logistic regression model using student-to-faculty ratio and instructional expenditure as predictors, then checks for multicollinearity and calculates odds ratios.</p>
+      <pre><code><span class="cm"># Fit logistic regression model on training set</span>
+model1 <span class="kw">&lt;-</span> <span class="fn">glm</span>(private <span class="kw">~</span> expend <span class="kw">+</span> s_f_ratio,
+               data   <span class="kw">=</span> caret_train,
+               family <span class="kw">=</span> <span class="fn">binomial</span>())
+<span class="fn">summary</span>(model1)
+<span class="cm"># s_f_ratio: p = 1.03e-14 (significant)</span>
+<span class="cm"># expend:    p ≈ 0.44     (not significant)</span>
+
+<span class="cm"># Check for multicollinearity</span>
+<span class="fn">vif</span>(model1)
+<span class="cm"># Both VIF ≈ 1.39 — no multicollinearity concern</span>
+
+<span class="cm"># Odds ratios</span>
+<span class="fn">exp</span>(<span class="fn">coef</span>(model1))
+<span class="cm"># s_f_ratio OR ≈ 0.73: each 1-unit increase reduces odds of "Private" by ~27%</span>
+<span class="cm"># expend OR ≈ 1.00: no meaningful effect</span></code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Confusion Matrix</h3>
+        <span class="code-tag">Model Evaluation</span>
+      </div>
+      <p class="code-desc">Generates predictions using a 0.5 threshold, ensures factor levels match, and evaluates with a confusion matrix on both training and test sets.</p>
+      <pre><code><span class="cm"># Training set predictions</span>
+probabilities.train <span class="kw">&lt;-</span> <span class="fn">predict</span>(model1, newdata <span class="kw">=</span> caret_train, type <span class="kw">=</span> <span class="st">"response"</span>)
+predicted.classes.min <span class="kw">&lt;-</span> <span class="fn">as.factor</span>(<span class="fn">ifelse</span>(probabilities.train <span class="kw">&gt;=</span> <span class="nm">0.5</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>))
+
+<span class="cm"># Ensure factor levels match</span>
+predicted.classes.min <span class="kw">&lt;-</span> <span class="fn">factor</span>(predicted.classes.min, levels <span class="kw">=</span> <span class="fn">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))
+caret_train<span class="kw">$</span>private <span class="kw">&lt;-</span> <span class="fn">factor</span>(caret_train<span class="kw">$</span>private, levels <span class="kw">=</span> <span class="fn">c</span>(<span class="st">"No"</span>, <span class="st">"Yes"</span>))
+
+<span class="cm"># Confusion matrix</span>
+confmatrix <span class="kw">&lt;-</span> <span class="fn">confusionMatrix</span>(predicted.classes.min, caret_train<span class="kw">$</span>private, positive <span class="kw">=</span> <span class="st">"Yes"</span>)
+<span class="fn">print</span>(confmatrix)
+<span class="cm"># Accuracy: 79.82% | Precision: 81.92% | Recall: 92.68% | Specificity: 45.64%</span></code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">ROC Curve and AUC</h3>
+        <span class="code-tag">Model Evaluation</span>
+      </div>
+      <p class="code-desc">Computes the ROC curve and AUC for the test set using pROC, then plots with a shaded area and AUC annotation using ggplot2.</p>
+      <pre><code><span class="cm"># Compute ROC object and AUC</span>
+roc_obj   <span class="kw">&lt;-</span> <span class="fn">roc</span>(caret_test<span class="kw">$</span>private, probabilities.test)
+auc_value <span class="kw">&lt;-</span> <span class="fn">auc</span>(roc_obj)
+
+<span class="cm"># Extract ROC data for plotting</span>
+roc_data <span class="kw">&lt;-</span> <span class="fn">data.frame</span>(
+  fpr <span class="kw">=</span> <span class="nm">1</span> <span class="kw">-</span> roc_obj<span class="kw">$</span>specificities,
+  tpr <span class="kw">=</span> roc_obj<span class="kw">$</span>sensitivities
+)
+
+<span class="cm"># Plot ROC curve with shaded AUC</span>
+<span class="fn">ggplot</span>() <span class="kw">+</span>
+  <span class="fn">geom_line</span>(data <span class="kw">=</span> roc_data, <span class="fn">aes</span>(x <span class="kw">=</span> fpr, y <span class="kw">=</span> tpr), color <span class="kw">=</span> <span class="st">"darkred"</span>, size <span class="kw">=</span> <span class="nm">1</span>) <span class="kw">+</span>
+  <span class="fn">geom_ribbon</span>(data <span class="kw">=</span> roc_data, <span class="fn">aes</span>(x <span class="kw">=</span> fpr, ymin <span class="kw">=</span> <span class="nm">0</span>, ymax <span class="kw">=</span> tpr),
+              fill <span class="kw">=</span> <span class="st">"darkorange"</span>, alpha <span class="kw">=</span> <span class="nm">0.3</span>) <span class="kw">+</span>
+  <span class="fn">geom_abline</span>(slope <span class="kw">=</span> <span class="nm">1</span>, intercept <span class="kw">=</span> <span class="nm">0</span>, linetype <span class="kw">=</span> <span class="st">"dashed"</span>, color <span class="kw">=</span> <span class="st">"gray"</span>) <span class="kw">+</span>
+  <span class="fn">annotate</span>(<span class="st">"text"</span>, x <span class="kw">=</span> <span class="nm">0.7</span>, y <span class="kw">=</span> <span class="nm">0.3</span>,
+           label <span class="kw">=</span> <span class="fn">paste</span>(<span class="st">"AUC ="</span>, <span class="fn">round</span>(auc_value, <span class="nm">3</span>)),
+           size <span class="kw">=</span> <span class="nm">5</span>, color <span class="kw">=</span> <span class="st">"darkred"</span>) <span class="kw">+</span>
+  <span class="fn">xlab</span>(<span class="st">"False Positive Rate (1 - Specificity)"</span>) <span class="kw">+</span>
+  <span class="fn">ylab</span>(<span class="st">"True Positive Rate (Sensitivity)"</span>) <span class="kw">+</span>
+  <span class="fn">ggtitle</span>(<span class="st">"ROC Curve for College Type Classification"</span>) <span class="kw">+</span>
+  <span class="fn">theme_minimal</span>()
+<span class="cm"># AUC = 0.85</span></code></pre>
+    </div>
+  </div>
+
+  <div class="back-bar">
+    <a href="work.html" class="back-link">← Back to Work</a>
+    <a href="index.html#contact" class="back-link">Get in Touch →</a>
+  </div>
+
+</body>
+</html>
