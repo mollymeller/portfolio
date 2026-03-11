@@ -133,15 +133,17 @@
     .schema-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 1px;
-      background: var(--rule);
+      gap: 0;
+      background: var(--cream);
       border: 1px solid var(--rule);
       margin-bottom: 1rem;
     }
     .schema-table {
       background: var(--cream);
       padding: 1.5rem;
+      border-right: 1px solid var(--rule);
     }
+    .schema-table:last-child { border-right: none; }
     .schema-table-name {
       font-family: 'Playfair Display', serif;
       font-size: 1rem;
