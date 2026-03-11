@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NYC Housing Analysis | Molly Meller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1510;
+      --warm-mid: #7a6a55;
+      --accent: #c8503a;
+      --accent-light: #e8927f;
+      --rule: #d4c9b5;
+      --code-bg: #1e1a14;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 10rem 3rem 5rem;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+    .page-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+    }
+    .page-title em { font-style: italic; color: var(--warm-mid); }
+    .page-sub {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--warm-mid);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+    .meta-box {
+      background: var(--ink);
+      padding: 2rem;
+      color: var(--cream);
+    }
+    .meta-item { margin-bottom: 1.5rem; }
+    .meta-item:last-child { margin-bottom: 0; }
+    .meta-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 0.3rem;
+    }
+    .meta-value { font-size: 0.92rem; color: #b8a890; }
+
+    /* SECTIONS */
+    .project-section {
+      padding: 5rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .project-section.dark {
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .project-section.dark .section-label { color: var(--accent-light); }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .project-section.dark .section-heading { color: var(--cream); }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--warm-mid);
+      max-width: 720px;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+    .project-section.dark .section-desc { color: #8a7d6a; }
+
+    /* RESEARCH QUESTIONS */
+    .rq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .rq-item {
+      background: var(--cream);
+      padding: 2rem;
+    }
+    .rq-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+    .rq-text {
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    /* FINDINGS */
+    .finding-block {
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid #3a3028;
+    }
+    .finding-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .finding-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      border: 1px solid var(--accent-light);
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+    .finding-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .finding-text {
+      font-size: 0.92rem;
+      color: #9a8d7a;
+      max-width: 680px;
+      line-height: 1.8;
+    }
+    .finding-stat {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #2a2018;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--accent-light);
+    }
+
+    /* VISUALIZATIONS */
+    .viz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .viz-item {}
+    .viz-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 0.5rem;
+    }
+    .viz-caption {
+      font-size: 0.85rem;
+      color: #8a7d6a;
+      margin-top: 0.75rem;
+      line-height: 1.6;
+    }
+    .viz-item img {
+      width: 100%;
+      border: 1px solid #3a3028;
+    }
+
+    /* CODE */
+    .code-block { margin-bottom: 3rem; }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .code-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+    .code-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+    }
+    .code-desc {
+      font-size: 0.9rem;
+      color: var(--warm-mid);
+      margin-bottom: 1rem;
+      max-width: 640px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 2rem;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent);
+    }
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: #d4c9b5;
+    }
+    .kw { color: #e8927f; font-weight: 500; }
+    .fn { color: #c8a96e; }
+    .cm { color: #5a5040; font-style: italic; }
+    .st { color: #8fbc8f; }
+    .nm { color: #b8d4e8; }
+
+    /* BACK BAR */
+    .back-bar {
+      padding: 1.5rem 3rem;
+      border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .back-link {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-header { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; }
+      .rq-grid { grid-template-columns: 1fr; }
+      .project-section { padding: 4rem 1.5rem; }
+      .back-bar { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">Molly Meller</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#education">Education</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <p class="page-eyebrow">R Project</p>
+      <h1 class="page-title">NYC Housing<br><em>Price Analysis</em></h1>
+      <p class="page-sub">An analysis of 34,439 NYC property sales using linear regression, chi-square testing, ANOVA, and stepwise model selection to identify key predictors of sale prices across the five boroughs.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-item">
+        <p class="meta-label">Tools</p>
+        <p class="meta-value">R, ggplot2, patchwork, caret, MASS, corrplot, leaps</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Methods</p>
+        <p class="meta-value">Linear Regression, Chi-Square, ANOVA, Tukey HSD, Stepwise Selection</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCH QUESTIONS -->
+  <div class="project-section">
+    <p class="section-label">Overview</p>
+    <h2 class="section-heading">Research Questions</h2>
+    <p class="section-desc">This project examined whether property dimensions or location factors better predict NYC housing prices, using four interconnected questions to build toward a stepwise regression model.</p>
+    <div class="rq-grid">
+      <div class="rq-item">
+        <p class="rq-number">Q1</p>
+        <p class="rq-text">Does residential area or commercial area provide better predictive power for NYC property sale prices when combined with lot area and number of floors?</p>
+      </div>
+      <div class="rq-item">
+        <p class="rq-number">Q2</p>
+        <p class="rq-text">Is there a relationship between the borough a property is located in and its land use classification?</p>
+      </div>
+      <div class="rq-item">
+        <p class="rq-number">Q3</p>
+        <p class="rq-text">Does the mean residential area vary significantly across boroughs? Does the mean commercial area vary significantly across boroughs?</p>
+      </div>
+      <div class="rq-item">
+        <p class="rq-number">Q4</p>
+        <p class="rq-text">How much does adding borough and land use classification to a stepwise regression model improve prediction of NYC property sale prices compared to area-only models?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="project-section dark">
+    <p class="section-label">Results</p>
+    <h2 class="section-heading">Key Findings</h2>
+    <p class="section-desc">Location variables substantially outperformed property dimensions across all four research questions.</p>
+
+    <div class="finding-block">
+      <span class="finding-label">Q1: Linear Regression</span>
+      <h3 class="finding-title">Residential area outperforms commercial area, but both show limited predictive power</h3>
+      <p class="finding-text">Two regression models were fitted to compare residential vs. commercial area as predictors of sale price, controlling for number of floors. Residential area provided stronger predictive power, but both models explained very little variance, indicating that property dimensions alone are insufficient for predicting NYC sale prices.</p>
+      <div>
+        <span class="finding-stat">Residential Adj. R² = 2.34%</span>
+        <span class="finding-stat" style="margin-left: 1rem;">Commercial Adj. R² = 0.19%</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Q2: Chi-Square Test</span>
+      <h3 class="finding-title">Borough and land use classification are significantly dependent</h3>
+      <p class="finding-text">A chi-square independence test confirmed a highly significant relationship between borough and land use (X² = 11,220, df = 40, p &lt; 2.2e-16). Manhattan is dominated by multi-family residential buildings while outer boroughs show predominantly one and two-family properties, reinforcing that location shapes property type across the city.</p>
+      <div>
+        <span class="finding-stat">X² = 11,220 &gt; CV = 55.76 → Reject H₀</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Q3: One-Way ANOVA</span>
+      <h3 class="finding-title">Mean property area differs significantly across all boroughs</h3>
+      <p class="finding-text">ANOVA tests confirmed highly significant differences in both mean residential and commercial area across the five boroughs (p &lt; 2e-16 for both). Manhattan averaged 117,374 sq. ft. of residential area versus 3,369 sq. ft. in Staten Island. Tukey HSD post-hoc tests revealed that Queens and the Bronx were the only non-significant pair for residential area, while Queens and Brooklyn showed no significant difference in commercial area.</p>
+      <div>
+        <span class="finding-stat">Residential F = 1,131</span>
+        <span class="finding-stat" style="margin-left: 1rem;">Commercial F = 651.2</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Q4: Stepwise Regression</span>
+      <h3 class="finding-title">Location variables quadruple predictive power over area-only models</h3>
+      <p class="finding-text">Adding borough and land use to a stepwise regression model increased adjusted R² from 2.35% to 9.77% on training data and 9.45% on test data, a 7.1 percentage point improvement with minimal overfitting. Notably, stepwise selection dropped residential area entirely from the final model, indicating its predictive value was fully absorbed by location variables.</p>
+      <div>
+        <span class="finding-stat">Training Adj. R² = 9.77%</span>
+        <span class="finding-stat" style="margin-left: 1rem;">Test Adj. R² = 9.45%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISUALIZATIONS -->
+  <div class="project-section dark">
+    <p class="section-label">Visualizations</p>
+    <h2 class="section-heading">Selected Charts</h2>
+    <p class="section-desc">Key visualizations from the analysis illustrating variable relationships, correlation structure, and borough-level patterns.</p>
+    <div class="viz-grid">
+      <div class="viz-item">
+        <p class="viz-label">Scatter Plot Matrix</p>
+        <img src="nyc-scatter.png" alt="Sale Price Relationships with Key Variables" />
+        <p class="viz-caption">Scatter plots with regression lines showing weak relationships between sale price and property area variables, illustrating the counterintuitive negative correlation for residential area in NYC.</p>
+      </div>
+      <div class="viz-item">
+        <p class="viz-label">Correlation Matrix</p>
+        <img src="nyc-corrplot.png" alt="Correlation Matrix" />
+        <p class="viz-caption">Correlation plot showing weak relationships across all variables. Residential and lot area show slight negative correlations with sale price, while commercial area shows a near-zero positive correlation.</p>
+      </div>
+      <div class="viz-item">
+        <p class="viz-label">Mean Residential and Commercial Area by Borough</p>
+        <img src="nyc-borough-bars.png" alt="Mean Residential and Commercial Area by Borough" />
+        <p class="viz-caption">Bar charts with standard error bars comparing mean residential and commercial area across boroughs. Manhattan's dramatically larger averages are visible across both variables.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- R CODE -->
+  <div class="project-section">
+    <p class="section-label">Selected Code</p>
+    <h2 class="section-heading">R Code</h2>
+    <p class="section-desc">Selected code blocks covering data preparation, regression modeling, chi-square testing, ANOVA, and stepwise selection.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Data Cleaning and Outlier Removal</h3>
+        <span class="code-tag">EDA</span>
+      </div>
+      <p class="code-desc">Removes 188 observations missing residential or commercial area, imputes number of floors to median, and removes outliers beyond ±3 standard deviations for area variables.</p>
+      <pre><code><span class="cm"># Remove missing values for residential and commercial area</span>
+nyc <span class="kw">&lt;-</span> nyc <span class="kw">%&gt;%</span>
+  <span class="fn">filter</span>(!<span class="fn">is.na</span>(resarea) <span class="kw">&amp;</span> !<span class="fn">is.na</span>(comarea))
+
+<span class="cm"># Impute missing values to median for number of floors</span>
+nyc<span class="kw">$</span>numfloors[<span class="fn">is.na</span>(nyc<span class="kw">$</span>numfloors)] <span class="kw">&lt;-</span> <span class="fn">median</span>(nyc<span class="kw">$</span>numfloors, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)
+
+<span class="cm"># Calculate z-scores and remove outliers beyond ±3 SD for area variables</span>
+nyc <span class="kw">&lt;-</span> nyc <span class="kw">%&gt;%</span>
+  <span class="fn">mutate</span>(z_resarea <span class="kw">=</span> <span class="fn">abs</span>((resarea <span class="kw">-</span> <span class="fn">mean</span>(resarea)) <span class="kw">/</span> <span class="fn">sd</span>(resarea)),
+         z_comarea <span class="kw">=</span> <span class="fn">abs</span>((comarea <span class="kw">-</span> <span class="fn">mean</span>(comarea)) <span class="kw">/</span> <span class="fn">sd</span>(comarea)),
+         z_lotarea <span class="kw">=</span> <span class="fn">abs</span>((lotarea <span class="kw">-</span> <span class="fn">mean</span>(lotarea)) <span class="kw">/</span> <span class="fn">sd</span>(lotarea))) <span class="kw">%&gt;%</span>
+  <span class="fn">filter</span>(z_resarea <span class="kw">&lt;=</span> <span class="nm">3</span>, z_comarea <span class="kw">&lt;=</span> <span class="nm">3</span>, z_lotarea <span class="kw">&lt;=</span> <span class="nm">3</span>)</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Linear Regression with Best Subsets</h3>
+        <span class="code-tag">Regression</span>
+      </div>
+      <p class="code-desc">Fits two regression models comparing residential vs. commercial area as predictors of sale price, with best subsets used to confirm variable selection.</p>
+      <pre><code><span class="cm"># Best subsets regression</span>
+best_fit <span class="kw">&lt;-</span> <span class="fn">regsubsets</span>(sale_price <span class="kw">~</span> resarea <span class="kw">+</span> comarea <span class="kw">+</span> lotarea <span class="kw">+</span> numfloors,
+                        data <span class="kw">=</span> nyc, nbest <span class="kw">=</span> <span class="nm">2</span>)
+
+<span class="cm"># Residential area model</span>
+fit1 <span class="kw">&lt;-</span> <span class="fn">lm</span>(sale_price <span class="kw">~</span> resarea <span class="kw">+</span> numfloors, data <span class="kw">=</span> nyc)
+
+<span class="cm"># Commercial area model</span>
+fit2 <span class="kw">&lt;-</span> <span class="fn">lm</span>(sale_price <span class="kw">~</span> comarea <span class="kw">+</span> numfloors, data <span class="kw">=</span> nyc)
+
+<span class="fn">summary</span>(fit1)  <span class="cm"># Adj. R² = 0.0234</span>
+<span class="fn">summary</span>(fit2)  <span class="cm"># Adj. R² = 0.0019</span>
+
+<span class="cm"># Check for multicollinearity</span>
+<span class="fn">vif</span>(fit1)
+<span class="fn">vif</span>(fit2)</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Chi-Square Independence Test</h3>
+        <span class="code-tag">Chi-Square</span>
+      </div>
+      <p class="code-desc">Tests whether borough and land use classification are independent categorical variables using a contingency table.</p>
+      <pre><code><span class="cm"># H0: Borough and land use are independent</span>
+<span class="cm"># H1: Borough and land use are dependent (claim)</span>
+
+<span class="cm"># Build contingency table</span>
+bor_land_table2 <span class="kw">&lt;-</span> <span class="fn">xtabs</span>(count <span class="kw">~</span> landuse <span class="kw">+</span> borough_y, data <span class="kw">=</span> bor_land_table)
+
+<span class="cm"># Degrees of freedom</span>
+df <span class="kw">&lt;-</span> (<span class="fn">nrow</span>(bor_land_table2) <span class="kw">-</span> <span class="nm">1</span>) <span class="kw">*</span> (<span class="fn">ncol</span>(bor_land_table2) <span class="kw">-</span> <span class="nm">1</span>)
+
+<span class="cm"># Critical value at df = 40, alpha = 0.05</span>
+cv <span class="kw">&lt;-</span> <span class="fn">qchisq</span>(<span class="nm">0.95</span>, df)  <span class="cm"># CV = 55.76</span>
+
+<span class="cm"># Chi-square test</span>
+chi_sq_test <span class="kw">&lt;-</span> <span class="fn">chisq.test</span>(bor_land_matrix)
+<span class="fn">print</span>(chi_sq_test)  <span class="cm"># X² = 11,220, p &lt; 2.2e-16 → Reject H0</span></code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">One-Way ANOVA with Tukey HSD</h3>
+        <span class="code-tag">ANOVA</span>
+      </div>
+      <p class="code-desc">Tests whether mean residential and commercial area differ significantly across NYC boroughs, with Tukey post-hoc comparisons to identify which borough pairs differ.</p>
+      <pre><code><span class="cm"># ANOVA for residential area</span>
+anova_resarea <span class="kw">&lt;-</span> <span class="fn">aov</span>(resarea <span class="kw">~</span> borough_y, data <span class="kw">=</span> nyc)
+<span class="fn">summary</span>(anova_resarea)  <span class="cm"># F = 1131, p &lt; 2e-16</span>
+
+<span class="cm"># ANOVA for commercial area</span>
+anova_comarea <span class="kw">&lt;-</span> <span class="fn">aov</span>(comarea <span class="kw">~</span> borough_y, data <span class="kw">=</span> nyc)
+<span class="fn">summary</span>(anova_comarea)  <span class="cm"># F = 651.2, p &lt; 2e-16</span>
+
+<span class="cm"># Critical value</span>
+critical_value <span class="kw">&lt;-</span> <span class="fn">qf</span>(<span class="nm">1</span> <span class="kw">-</span> <span class="nm">0.05</span>, df1 <span class="kw">=</span> <span class="nm">4</span>, df2 <span class="kw">=</span> <span class="nm">33780</span>)  <span class="cm"># CV = 2.37</span>
+
+<span class="cm"># Tukey HSD post-hoc tests</span>
+tukey_resarea <span class="kw">&lt;-</span> <span class="fn">TukeyHSD</span>(anova_resarea)
+tukey_comarea <span class="kw">&lt;-</span> <span class="fn">TukeyHSD</span>(anova_comarea)
+
+<span class="fn">print</span>(tukey_resarea)  <span class="cm"># Manhattan significantly larger than all boroughs</span>
+<span class="fn">print</span>(tukey_comarea)  <span class="cm"># Queens-Brooklyn only non-significant pair</span></code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Stepwise Regression with Borough and Land Use</h3>
+        <span class="code-tag">Stepwise</span>
+      </div>
+      <p class="code-desc">Splits data 70/30, fits a full model with area and location variables, then applies bidirectional stepwise selection to identify the optimal predictor set.</p>
+      <pre><code><span class="cm"># 70/30 train/test split</span>
+<span class="fn">set.seed</span>(<span class="nm">123</span>)
+train_index <span class="kw">&lt;-</span> <span class="fn">createDataPartition</span>(nyc<span class="kw">$</span>sale_price, p <span class="kw">=</span> <span class="nm">0.7</span>, list <span class="kw">=</span> <span class="nm">FALSE</span>)
+caret_train <span class="kw">&lt;-</span> nyc[train_index, ]
+caret_test  <span class="kw">&lt;-</span> nyc[-train_index, ]
+
+<span class="cm"># Full model with area + location variables</span>
+full_model_location <span class="kw">&lt;-</span> <span class="fn">lm</span>(sale_price <span class="kw">~</span> resarea <span class="kw">+</span> comarea <span class="kw">+</span> lotarea <span class="kw">+</span>
+                            numfloors <span class="kw">+</span> borough_y <span class="kw">+</span> <span class="fn">factor</span>(landuse),
+                          data <span class="kw">=</span> caret_train)
+
+<span class="cm"># Bidirectional stepwise selection</span>
+stepwise_location <span class="kw">&lt;-</span> <span class="fn">stepAIC</span>(full_model_location,
+                               direction <span class="kw">=</span> <span class="st">"both"</span>, trace <span class="kw">=</span> <span class="nm">FALSE</span>)
+<span class="fn">summary</span>(stepwise_location)  <span class="cm"># Adj. R² = 0.0977, resarea dropped</span>
+
+<span class="cm"># Test set predictions</span>
+preds_test_location <span class="kw">&lt;-</span> <span class="fn">predict</span>(stepwise_location, newdata <span class="kw">=</span> caret_test)
+
+<span class="cm"># Test R²</span>
+ss_res <span class="kw">&lt;-</span> <span class="fn">sum</span>((caret_test<span class="kw">$</span>sale_price <span class="kw">-</span> preds_test_location)<span class="kw">^</span><span class="nm">2</span>)
+ss_tot <span class="kw">&lt;-</span> <span class="fn">sum</span>((caret_test<span class="kw">$</span>sale_price <span class="kw">-</span> <span class="fn">mean</span>(caret_test<span class="kw">$</span>sale_price))<span class="kw">^</span><span class="nm">2</span>)
+test_r2 <span class="kw">&lt;-</span> <span class="nm">1</span> <span class="kw">-</span> (ss_res <span class="kw">/</span> ss_tot)
+<span class="fn">cat</span>(<span class="st">"Test R²:"</span>, <span class="fn">round</span>(test_r2, <span class="nm">4</span>))  <span class="cm"># 0.0945</span></code></pre>
+    </div>
+  </div>
+
+  <div class="back-bar">
+    <a href="work.html" class="back-link">← Back to Work</a>
+    <a href="index.html#contact" class="back-link">Get in Touch →</a>
+  </div>
+
+</body>
+</html>
