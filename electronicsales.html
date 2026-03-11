@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electronic Sales Analysis | Molly Meller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8; --ink: #1a1510; --warm-mid: #7a6a55;
+      --accent: #c8503a; --accent-light: #e8927f; --rule: #d4c9b5; --code-bg: #1e1a14;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.2rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(245,240,232,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1.1rem; letter-spacing: 0.04em; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-mid); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    .page-header { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: end; }
+    .page-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 700; }
+    .page-title em { font-style: italic; color: var(--warm-mid); }
+    .page-sub { margin-top: 1.5rem; font-size: 1.05rem; color: var(--warm-mid); max-width: 560px; line-height: 1.8; }
+    .meta-box { background: var(--ink); padding: 2rem; }
+    .meta-item { margin-bottom: 1.5rem; }
+    .meta-item:last-child { margin-bottom: 0; }
+    .meta-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.3rem; }
+    .meta-value { font-size: 0.92rem; color: #b8a890; line-height: 1.6; }
+
+    .project-section { padding: 5rem 3rem; border-bottom: 1px solid var(--rule); }
+    .project-section.dark { background: var(--ink); color: var(--cream); }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .project-section.dark .section-label { color: var(--accent-light); }
+    .section-heading { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .project-section.dark .section-heading { color: var(--cream); }
+    .section-desc { font-size: 0.95rem; color: var(--warm-mid); max-width: 720px; margin-bottom: 2.5rem; line-height: 1.8; }
+    .project-section.dark .section-desc { color: #8a7d6a; }
+
+    .rq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+    .rq-item { background: var(--cream); padding: 2rem; }
+    .rq-number { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.75rem; }
+    .rq-text { font-size: 0.95rem; color: var(--ink); line-height: 1.7; }
+
+    .eda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .eda-card { border: 1px solid var(--rule); padding: 1.5rem; }
+    .eda-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.5rem; }
+    .eda-card-body { font-size: 0.88rem; color: var(--warm-mid); line-height: 1.7; }
+
+    .finding-block { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid #3a3028; }
+    .finding-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .finding-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); border: 1px solid var(--accent-light); display: inline-block; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 0.75rem; }
+    .finding-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); margin-bottom: 0.75rem; }
+    .finding-text { font-size: 0.92rem; color: #9a8d7a; max-width: 680px; line-height: 1.8; }
+    .finding-stat { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #2a2018; font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent-light); }
+
+    .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .viz-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.5rem; }
+    .viz-caption { font-size: 0.85rem; color: #8a7d6a; margin-top: 0.75rem; line-height: 1.6; }
+    .viz-item img { width: 100%; border: 1px solid #3a3028; }
+
+    .contrib-list { list-style: none; }
+    .contrib-list li { padding: 1rem 0; border-bottom: 1px solid var(--rule); font-size: 0.95rem; color: var(--ink); display: flex; gap: 1rem; align-items: flex-start; }
+    .contrib-list li:first-child { border-top: 1px solid var(--rule); }
+    .contrib-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; flex-shrink: 0; margin-top: 0.55rem; }
+
+    .code-block { margin-bottom: 3rem; }
+    .code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .code-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--ink); }
+    .code-tag { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.15rem 0.5rem; border-radius: 2px; }
+    .code-desc { font-size: 0.9rem; color: var(--warm-mid); margin-bottom: 1rem; max-width: 640px; }
+    pre { background: var(--code-bg); padding: 2rem; overflow-x: auto; border-left: 3px solid var(--accent); }
+    code { font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.8; color: #d4c9b5; }
+    .kw { color: #e8927f; font-weight: 500; } .fn { color: #c8a96e; } .cm { color: #5a5040; font-style: italic; } .st { color: #8fbc8f; } .nm { color: #b8d4e8; }
+
+    .back-bar { padding: 1.5rem 3rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .back-link { text-decoration: none; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-mid); transition: color 0.2s; }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; }
+      .page-header { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; }
+      .rq-grid, .eda-grid, .viz-grid { grid-template-columns: 1fr; }
+      .project-section { padding: 4rem 1.5rem; } .back-bar { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">Molly Meller</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#education">Education</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div>
+      <p class="page-eyebrow">R Project</p>
+      <h1 class="page-title">Electronic Sales<br><em>Data Analysis</em></h1>
+      <p class="page-sub">Advanced analysis of 20,000 simulated consumer electronics transactions, using hypothesis testing, correlation analysis, and regression modeling to uncover patterns in sales, ratings, and revenue growth over time.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-item">
+        <p class="meta-label">Tools</p>
+        <p class="meta-value">R, ggplot2, tidyverse, janitor</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Methods</p>
+        <p class="meta-value">Z-Test, T-Tests, Correlation Analysis, Simple and Multiple Linear Regression</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Collaborators</p>
+        <p class="meta-value">Matthew Weeks, Eugenia Owusu Nyam</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Dataset</p>
+        <p class="meta-value">Electronic Sales, Sep 2023 to Sep 2024 (Kaggle)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-section">
+    <p class="section-label">Overview</p>
+    <h2 class="section-heading">Questions Explored</h2>
+    <p class="section-desc">Three questions guided the analysis, each pairing a hypothesis test with correlation and regression to assess predictive power across different variable relationships.</p>
+    <div class="rq-grid">
+      <div class="rq-item">
+        <p class="rq-number">Q1</p>
+        <p class="rq-text">How well can we predict total price based on quantity? What about based on unit price and quantity?</p>
+      </div>
+      <div class="rq-item">
+        <p class="rq-number">Q2</p>
+        <p class="rq-text">How well can we predict rating based on unit price within a single product type? Are gender, order status, or loyalty status useful predictors?</p>
+      </div>
+      <div class="rq-item">
+        <p class="rq-number">Q3</p>
+        <p class="rq-text">How do average daily sales per month vary over time? Can we predict average daily sales in future months?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-section">
+    <p class="section-label">Exploratory Data Analysis</p>
+    <h2 class="section-heading">EDA Summary</h2>
+    <p class="section-desc">Before analysis, a full EDA was conducted across all key variables including age, rating, gender, loyalty status, product type, order status, total price, unit price, quantity, and add-on totals. Outliers beyond ±3 z-scores were removed from total price and add-on totals.</p>
+    <div class="eda-grid">
+      <div class="eda-card">
+        <h3 class="eda-card-title">Data Cleaning</h3>
+        <p class="eda-card-body">One gender NA was removed. Add-on purchase NAs were recoded to "None." Extreme outliers exceeding ±3 standard deviations were removed for total price and add-on totals, resulting in meaningful changes to those distributions.</p>
+      </div>
+      <div class="eda-card">
+        <h3 class="eda-card-title">Normality</h3>
+        <p class="eda-card-body">Age, total price, and add-on totals appeared mostly normal. Ratings, unit prices, and quantity did not follow normal distributions. Cleaning had little to no impact on normality across variables.</p>
+      </div>
+      <div class="eda-card">
+        <h3 class="eda-card-title">Gender and Age Patterns</h3>
+        <p class="eda-card-body">Men completed more orders than women. Purchasing patterns across age groups (18 to 80) were nearly identical, with minimal differences in mean total price or order frequency by age.</p>
+      </div>
+      <div class="eda-card">
+        <h3 class="eda-card-title">Loyalty and Product Pricing</h3>
+        <p class="eda-card-body">Loyalty and non-loyalty members completed orders at roughly the same rate (~67%). Average unit prices varied considerably by product type, with smartwatches averaging the highest mean price and headphones the lowest.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-section dark">
+    <p class="section-label">Results</p>
+    <h2 class="section-heading">Key Findings</h2>
+    <p class="section-desc">Hypothesis tests, correlations, and regression models were applied to each question. Q3 was the primary analytical focus.</p>
+
+    <div class="finding-block">
+      <span class="finding-label">Q1: Total Price Prediction</span>
+      <h3 class="finding-title">Quantity and unit price are both significant predictors of total price</h3>
+      <p class="finding-text">Two-sample t-tests confirmed statistically significant differences in total price between high and low quantity groups and high and low unit price groups (p &lt; 0.05 for both). Quantity alone explained 42% of variation. Adding unit price dramatically improved predictive power, explaining 87% of variation.</p>
+      <div>
+        <span class="finding-stat">Simple R² = 0.42</span>
+        <span class="finding-stat" style="margin-left:1rem;">Multiple R² = 0.87</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Q2: Rating Prediction</span>
+      <h3 class="finding-title">Unit price negatively predicts smartphone ratings; loyalty status adds marginal improvement</h3>
+      <p class="finding-text">Within the smartphone category, unit price and rating showed a strong negative correlation (r = -0.69). A regression using unit price alone explained ~47% of rating variation. Adding loyalty status offered a slight improvement. Gender, order status, and loyalty membership showed no statistically significant relationship with ratings individually.</p>
+      <div>
+        <span class="finding-stat">r = -0.69</span>
+        <span class="finding-stat" style="margin-left:1rem;">R² = 0.47</span>
+      </div>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Q3: Daily Sales Over Time</span>
+      <h3 class="finding-title">Average daily sales increased sharply and significantly after April 2024</h3>
+      <p class="finding-text">An independent samples Z-test confirmed that average daily sales differed significantly on or before April 24, 2024 compared to after (z ≈ -13.29, p ≈ 2.2e-16). Correlation analysis showed a strong positive relationship between month progression and average daily sales (r ≈ 0.82). Regression found sales grew by approximately $13,561 per month (R² = 0.65), though the actual pattern reflected a sharp jump in January 2024 rather than gradual growth.</p>
+      <div>
+        <span class="finding-stat">z ≈ -13.29, p ≈ 2.2e-16</span>
+        <span class="finding-stat" style="margin-left:1rem;">r ≈ 0.82</span>
+        <span class="finding-stat" style="margin-left:1rem;">R² = 0.65</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-section dark">
+    <p class="section-label">Visualizations</p>
+    <h2 class="section-heading">Selected Charts</h2>
+    <p class="section-desc">Two visualizations from Q3 illustrating the sharp increase in average daily sales and the regression trend over the observation period.</p>
+    <div class="viz-grid">
+      <div class="viz-item">
+        <p class="viz-label">Orders and Spending by Loyalty Status</p>
+        <img src="elec-loyalty-charts.png" alt="Completed Orders and Total Price by Loyalty Member Status" />
+        <p class="viz-caption">Bar chart and histogram comparing completed vs. cancelled orders and total price distributions between loyalty and non-loyalty members. Both groups show nearly identical order completion rates (~67%) and similar spending patterns.</p>
+      </div>
+      <div class="viz-item">
+        <p class="viz-label">Regression: Sales Over Time</p>
+        <img src="elec-regression.png" alt="Scatter Plot of Average Daily Sales with Regression Line" />
+        <p class="viz-caption">Scatter plot with regression line showing the upward trend across 13 months. The regression captures the overall direction, though the actual pattern reflects a sharp discontinuity rather than gradual growth.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-section">
+    <p class="section-label">Selected Code</p>
+    <h2 class="section-heading">R Code</h2>
+    <p class="section-desc">Selected code from the EDA and Q3 analysis, covering data cleaning, descriptive statistics, the Z-test, and regression with visualizations.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Data Cleaning</h3>
+        <span class="code-tag">EDA</span>
+      </div>
+      <p class="code-desc">Removes the invalid gender entry, recodes add-on NAs, and strips outliers beyond ±3 z-scores from total price and add-on total.</p>
+      <pre><code><span class="cm"># Remove invalid gender entry</span>
+sales_clean <span class="kw">&lt;-</span> sales <span class="kw">%&gt;%</span>
+  <span class="fn">filter</span>(gender <span class="kw">!=</span> <span class="st">"#N/A"</span>)
+
+<span class="cm"># Recode add-on NAs to "None"</span>
+sales_clean <span class="kw">&lt;-</span> sales_clean <span class="kw">%&gt;%</span>
+  <span class="fn">mutate</span>(add_ons_purchased <span class="kw">=</span> <span class="fn">ifelse</span>(<span class="fn">is.na</span>(add_ons_purchased), <span class="st">"None"</span>, add_ons_purchased))
+
+<span class="cm"># Remove total_price outliers beyond +/- 3 z-scores</span>
+<span class="cm"># Max Z score = 3.228527 > 3</span>
+sales_clean <span class="kw">&lt;-</span> sales_clean <span class="kw">%&gt;%</span>
+  <span class="fn">filter</span>(<span class="fn">abs</span>((total_price <span class="kw">-</span> <span class="fn">mean</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)) <span class="kw">/</span> <span class="fn">sd</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)) <span class="kw">&lt;</span> <span class="nm">3</span>)
+
+<span class="cm"># Remove add_on_total outliers beyond +/- 3 z-scores</span>
+<span class="cm"># Max Z score = 3.986791 > 3</span>
+sales_clean <span class="kw">&lt;-</span> sales_clean <span class="kw">%&gt;%</span>
+  <span class="fn">filter</span>(<span class="fn">abs</span>((add_on_total <span class="kw">-</span> <span class="fn">mean</span>(add_on_total, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)) <span class="kw">/</span> <span class="fn">sd</span>(add_on_total, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)) <span class="kw">&lt;</span> <span class="nm">3</span>)</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Descriptive Statistics Table</h3>
+        <span class="code-tag">EDA</span>
+      </div>
+      <p class="code-desc">Builds a tidy summary statistics table across all key variables using pivot_longer and pivot_wider.</p>
+      <pre><code>sales_sumstat_clean <span class="kw">&lt;-</span> sales_clean <span class="kw">%&gt;%</span>
+  <span class="fn">summarise</span>(
+    age_mean <span class="kw">=</span> <span class="fn">mean</span>(age, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),       age_median <span class="kw">=</span> <span class="fn">median</span>(age, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    age_sd   <span class="kw">=</span> <span class="fn">sd</span>(age, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),         age_max    <span class="kw">=</span> <span class="fn">max</span>(age, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    age_min  <span class="kw">=</span> <span class="fn">min</span>(age, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    total_price_mean   <span class="kw">=</span> <span class="fn">mean</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    total_price_median <span class="kw">=</span> <span class="fn">median</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    total_price_sd     <span class="kw">=</span> <span class="fn">sd</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    total_price_max    <span class="kw">=</span> <span class="fn">max</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    total_price_min    <span class="kw">=</span> <span class="fn">min</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)
+    <span class="cm"># ... repeated for rating, unit_price, quantity, add_on_total</span>
+  ) <span class="kw">%&gt;%</span>
+  <span class="fn">pivot_longer</span>(everything(),
+               names_to  <span class="kw">=</span> <span class="fn">c</span>(<span class="st">"variable"</span>, <span class="st">"statistic"</span>),
+               names_pattern <span class="kw">=</span> <span class="st">"(.*)_(mean|median|sd|max|min)$"</span>,
+               values_to <span class="kw">=</span> <span class="st">"value"</span>) <span class="kw">%&gt;%</span>
+  <span class="fn">pivot_wider</span>(names_from  <span class="kw">=</span> variable,
+              values_from <span class="kw">=</span> value)</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Independent Samples Z-Test</h3>
+        <span class="code-tag">Hypothesis Test</span>
+      </div>
+      <p class="code-desc">Tests whether average daily sales differ significantly before and after the median purchase date of April 24, 2024. Includes automatic decision output and 95% confidence interval.</p>
+      <pre><code><span class="cm"># H0: Average daily sales are the same on or before April 24, 2024 vs. after</span>
+<span class="cm"># H1: Average daily sales differ significantly — Alpha = 0.05</span>
+
+totalba_alpha <span class="kw">&lt;-</span> <span class="nm">0.05</span>
+
+total_before_n    <span class="kw">&lt;-</span> <span class="fn">length</span>(daily_totals_before<span class="kw">$</span>daily_total)
+total_after_n     <span class="kw">&lt;-</span> <span class="fn">length</span>(daily_totals_after<span class="kw">$</span>daily_total)
+total_before_mean <span class="kw">&lt;-</span> <span class="fn">mean</span>(daily_totals_before<span class="kw">$</span>daily_total)
+total_before_sd   <span class="kw">&lt;-</span> <span class="fn">sd</span>(daily_totals_before<span class="kw">$</span>daily_total)
+total_after_mean  <span class="kw">&lt;-</span> <span class="fn">mean</span>(daily_totals_after<span class="kw">$</span>daily_total)
+total_after_sd    <span class="kw">&lt;-</span> <span class="fn">sd</span>(daily_totals_after<span class="kw">$</span>daily_total)
+
+totalba_z_stat <span class="kw">&lt;-</span> (total_before_mean <span class="kw">-</span> total_after_mean) <span class="kw">/</span>
+  <span class="fn">sqrt</span>((total_before_sd<span class="kw">^</span><span class="nm">2</span> <span class="kw">/</span> total_before_n) <span class="kw">+</span> (total_after_sd<span class="kw">^</span><span class="nm">2</span> <span class="kw">/</span> total_after_n))
+
+totalba_cv      <span class="kw">&lt;-</span> <span class="fn">qnorm</span>(<span class="nm">1</span> <span class="kw">-</span> (totalba_alpha <span class="kw">/</span> <span class="nm">2</span>))
+totalba_p_value <span class="kw">&lt;-</span> <span class="nm">2</span> <span class="kw">*</span> (<span class="nm">1</span> <span class="kw">-</span> <span class="fn">pnorm</span>(<span class="fn">abs</span>(totalba_z_stat)))
+
+<span class="fn">cat</span>(<span class="st">"Z-statistic:"</span>, totalba_z_stat, <span class="st">"P-value:"</span>, totalba_p_value)
+
+<span class="kw">if</span> (<span class="fn">abs</span>(totalba_z_stat) <span class="kw">&gt;</span> totalba_cv) {
+  <span class="fn">print</span>(<span class="st">"Reject the NULL hypothesis - prices are significantly different"</span>)
+} <span class="kw">else</span> {
+  <span class="fn">print</span>(<span class="st">"Do NOT Reject the NULL Hypothesis - no significant difference"</span>)
+}
+
+<span class="cm"># 95% Confidence Interval</span>
+totalba_se        <span class="kw">&lt;-</span> <span class="fn">sqrt</span>((total_before_sd<span class="kw">^</span><span class="nm">2</span> <span class="kw">/</span> total_before_n) <span class="kw">+</span> (total_after_sd<span class="kw">^</span><span class="nm">2</span> <span class="kw">/</span> total_after_n))
+totalba_mean_diff <span class="kw">&lt;-</span> total_before_mean <span class="kw">-</span> total_after_mean
+totalba_ci_lower  <span class="kw">&lt;-</span> totalba_mean_diff <span class="kw">-</span> (totalba_cv <span class="kw">*</span> totalba_se)
+totalba_ci_upper  <span class="kw">&lt;-</span> totalba_mean_diff <span class="kw">+</span> (totalba_cv <span class="kw">*</span> totalba_se)
+<span class="cm"># Z ≈ -13.29, p ≈ 2.2e-16 → Reject null hypothesis</span></code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <h3 class="code-title">Regression and Visualization: Average Daily Sales Over Time</h3>
+        <span class="code-tag">Regression</span>
+      </div>
+      <p class="code-desc">Builds monthly average daily sales data, fits a linear regression with month index as the predictor, and produces both a scatter plot with regression line and a bar chart of monthly averages. Includes predictions for future months.</p>
+      <pre><code><span class="cm"># Build monthly average daily sales dataset</span>
+daily_sales <span class="kw">&lt;-</span> sales_clean <span class="kw">%&gt;%</span>
+  <span class="fn">group_by</span>(purchase_date) <span class="kw">%&gt;%</span>
+  <span class="fn">summarise</span>(daily_total <span class="kw">=</span> <span class="fn">sum</span>(total_price, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)) <span class="kw">%&gt;%</span>
+  <span class="fn">mutate</span>(year_month <span class="kw">=</span> <span class="fn">format</span>(purchase_date, <span class="st">"%Y-%m"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fn">group_by</span>(year_month) <span class="kw">%&gt;%</span>
+  <span class="fn">summarise</span>(
+    monthly_total       <span class="kw">=</span> <span class="fn">sum</span>(daily_total, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>),
+    average_daily_total <span class="kw">=</span> <span class="fn">mean</span>(daily_total, na.rm <span class="kw">=</span> <span class="nm">TRUE</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fn">mutate</span>(month_index <span class="kw">=</span> <span class="fn">row_number</span>())
+
+<span class="cm"># Correlation</span>
+cov_time <span class="kw">&lt;-</span> <span class="fn">cov</span>(daily_sales<span class="kw">$</span>month_index, daily_sales<span class="kw">$</span>average_daily_total)
+cor_time <span class="kw">&lt;-</span> <span class="fn">cor</span>(daily_sales<span class="kw">$</span>month_index, daily_sales<span class="kw">$</span>average_daily_total)
+<span class="cm"># Covariance = $205,676.30 | r ≈ 0.82</span>
+
+<span class="cm"># Regression model</span>
+reg_time <span class="kw">&lt;-</span> <span class="fn">lm</span>(average_daily_total <span class="kw">~</span> month_index, data <span class="kw">=</span> daily_sales)
+<span class="fn">summary</span>(reg_time)
+<span class="cm"># Slope = $13,561/month | y-intercept = $66,158 | R² = 0.6489</span>
+
+<span class="cm"># Scatter plot with regression line</span>
+<span class="fn">ggplot</span>(daily_sales, <span class="fn">aes</span>(x <span class="kw">=</span> month_index, y <span class="kw">=</span> average_daily_total)) <span class="kw">+</span>
+  <span class="fn">geom_point</span>(color <span class="kw">=</span> <span class="st">"darkorange"</span>, alpha <span class="kw">=</span> <span class="nm">0.7</span>) <span class="kw">+</span>
+  <span class="fn">geom_smooth</span>(method <span class="kw">=</span> <span class="st">"lm"</span>, color <span class="kw">=</span> <span class="st">"darkred"</span>) <span class="kw">+</span>
+  <span class="fn">labs</span>(title <span class="kw">=</span> <span class="st">"Scatter Plot of Average Daily Sales Over Time with Regression Line"</span>,
+       x <span class="kw">=</span> <span class="st">"Month"</span>, y <span class="kw">=</span> <span class="st">"Average Daily Sales"</span>) <span class="kw">+</span>
+  <span class="fn">theme_minimal</span>()
+
+<span class="cm"># Bar chart of monthly averages</span>
+<span class="fn">ggplot</span>(daily_sales, <span class="fn">aes</span>(x <span class="kw">=</span> year_month, y <span class="kw">=</span> average_daily_total)) <span class="kw">+</span>
+  <span class="fn">geom_bar</span>(stat <span class="kw">=</span> <span class="st">"identity"</span>, fill <span class="kw">=</span> <span class="st">"darkorange"</span>) <span class="kw">+</span>
+  <span class="fn">labs</span>(title <span class="kw">=</span> <span class="st">"Average Daily Sales Per Month"</span>,
+       x <span class="kw">=</span> <span class="st">"Month"</span>, y <span class="kw">=</span> <span class="st">"Average Daily Sales"</span>) <span class="kw">+</span>
+  <span class="fn">theme_minimal</span>() <span class="kw">+</span>
+  <span class="fn">theme</span>(axis.text.x <span class="kw">=</span> <span class="fn">element_text</span>(angle <span class="kw">=</span> <span class="nm">45</span>, hjust <span class="kw">=</span> <span class="nm">1</span>))
+
+<span class="cm"># Predictions for future months 14-26</span>
+future_months     <span class="kw">&lt;-</span> <span class="fn">data.frame</span>(month_index <span class="kw">=</span> <span class="fn">c</span>(<span class="nm">14</span><span class="kw">:</span><span class="nm">26</span>))
+months_predict_CI <span class="kw">&lt;-</span> <span class="fn">predict</span>(reg_time, newdata <span class="kw">=</span> future_months, interval <span class="kw">=</span> <span class="st">"confidence"</span>)
+months_predict_PI <span class="kw">&lt;-</span> <span class="fn">predict</span>(reg_time, newdata <span class="kw">=</span> future_months, interval <span class="kw">=</span> <span class="st">"prediction"</span>)</code></pre>
+    </div>
+  </div>
+
+  <div class="back-bar">
+    <a href="work.html" class="back-link">← Back to Work</a>
+    <a href="index.html#contact" class="back-link">Get in Touch →</a>
+  </div>
+
+</body>
+</html>
