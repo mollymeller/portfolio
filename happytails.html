@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Tails Database | Molly Meller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1510;
+      --warm-mid: #7a6a55;
+      --accent: #c8503a;
+      --accent-light: #e8927f;
+      --rule: #d4c9b5;
+      --code-bg: #1e1a14;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 10rem 3rem 5rem;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+    .page-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+    }
+    .page-title em { font-style: italic; color: var(--warm-mid); }
+    .page-sub {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--warm-mid);
+      max-width: 560px;
+    }
+    .meta-box {
+      background: var(--ink);
+      padding: 2rem;
+      color: var(--cream);
+    }
+    .meta-item { margin-bottom: 1.5rem; }
+    .meta-item:last-child { margin-bottom: 0; }
+    .meta-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 0.3rem;
+    }
+    .meta-value {
+      font-size: 0.92rem;
+      color: #b8a890;
+    }
+
+    /* SECTIONS */
+    .project-section {
+      padding: 5rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .project-section:last-of-type { border-bottom: none; }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--warm-mid);
+      max-width: 640px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+
+    /* SCHEMA */
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin-bottom: 1rem;
+    }
+    .schema-table {
+      background: var(--cream);
+      padding: 1.5rem;
+    }
+    .schema-table-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      color: var(--ink);
+    }
+    .schema-fields { list-style: none; }
+    .schema-fields li {
+      font-size: 0.78rem;
+      color: var(--warm-mid);
+      padding: 0.2rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-family: 'Courier New', monospace;
+    }
+    .schema-fields li:last-child { border-bottom: none; }
+    .schema-fields li.pk { color: var(--accent); font-weight: 500; }
+    .schema-fields li.fk { color: var(--warm-mid); }
+
+    /* CODE BLOCKS */
+    .query-block {
+      margin-bottom: 3rem;
+    }
+    .query-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .query-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+    }
+    .query-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+    }
+    .query-desc {
+      font-size: 0.9rem;
+      color: var(--warm-mid);
+      margin-bottom: 1rem;
+      max-width: 640px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 2rem;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent);
+    }
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: #d4c9b5;
+    }
+    .kw { color: #e8927f; font-weight: 500; }
+    .fn { color: #c8a96e; }
+    .cm { color: #5a5040; font-style: italic; }
+    .st { color: #8fbc8f; }
+
+    /* BACK BAR */
+    .back-bar {
+      padding: 1.5rem 3rem;
+      border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .back-link {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-header { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; }
+      .project-section { padding: 4rem 1.5rem; }
+      .back-bar { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-brand">Molly Meller</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#education">Education</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div>
+      <p class="page-eyebrow">SQL Project</p>
+      <h1 class="page-title">Happy Tails<br><em>Pet Services</em></h1>
+      <p class="page-sub">A relational database project for a fictional pet care business, using SQL to analyze visit patterns, sitter performance, facility revenue, and service demand across multiple locations.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-item">
+        <p class="meta-label">Tool</p>
+        <p class="meta-value">SQL / DB Browser for SQLite</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Skills</p>
+        <p class="meta-value">JOINs, Aggregation, GROUP BY, Subqueries</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Context</p>
+        <p class="meta-value">Database design and business analysis</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEMA -->
+  <div class="project-section">
+    <p class="section-label">Database Design</p>
+    <h2 class="section-heading">Schema Overview</h2>
+    <p class="section-desc">The Happy Tails database consists of six relational tables tracking customers, pets, sitters, facilities, visits, services, and payments. Queries use multi-table JOINs to surface business insights across the full customer journey.</p>
+    <div class="schema-grid">
+      <div class="schema-table">
+        <p class="schema-table-name">customer</p>
+        <ul class="schema-fields">
+          <li class="pk">customer_id (PK)</li>
+          <li>customer_fname</li>
+          <li>customer_lname</li>
+          <li>customer_type</li>
+        </ul>
+      </div>
+      <div class="schema-table">
+        <p class="schema-table-name">pet</p>
+        <ul class="schema-fields">
+          <li class="pk">pet_id (PK)</li>
+          <li class="fk">customer_id (FK)</li>
+          <li>pet_name</li>
+          <li>pet_breed</li>
+        </ul>
+      </div>
+      <div class="schema-table">
+        <p class="schema-table-name">visit</p>
+        <ul class="schema-fields">
+          <li class="pk">visit_id (PK)</li>
+          <li class="fk">pet_id (FK)</li>
+          <li class="fk">service_id (FK)</li>
+          <li class="fk">facility_id (FK)</li>
+          <li>visit_check_in_date</li>
+          <li>visit_check_out_date</li>
+          <li>visit_days_stayed</li>
+        </ul>
+      </div>
+      <div class="schema-table">
+        <p class="schema-table-name">sitter</p>
+        <ul class="schema-fields">
+          <li class="pk">sitter_id (PK)</li>
+          <li class="fk">sitter_facility_id (FK)</li>
+          <li>sitter_fname</li>
+          <li>sitter_lname</li>
+        </ul>
+      </div>
+      <div class="schema-table">
+        <p class="schema-table-name">facility</p>
+        <ul class="schema-fields">
+          <li class="pk">facility_id (PK)</li>
+          <li>facility_name</li>
+          <li>facility_state</li>
+        </ul>
+      </div>
+      <div class="schema-table">
+        <p class="schema-table-name">payment</p>
+        <ul class="schema-fields">
+          <li class="pk">payment_id (PK)</li>
+          <li class="fk">visit_id (FK)</li>
+          <li>payment_final_price</li>
+          <li>payment_promo_code</li>
+          <li>payment_loyalty_points</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUERIES -->
+  <div class="project-section" style="background: var(--ink); color: var(--cream);">
+    <p class="section-label" style="color: var(--accent-light);">SQL Queries</p>
+    <h2 class="section-heading" style="color: var(--cream);">Business Analysis</h2>
+    <p class="section-desc" style="color: #8a7d6a;">Five queries designed to answer key business questions about customer behavior, sitter performance, facility revenue, and service demand.</p>
+
+    <div class="query-block">
+      <div class="query-header">
+        <h3 class="query-title" style="color: var(--cream);">Customer Visit History</h3>
+        <span class="query-tag">JOIN</span>
+      </div>
+      <p class="query-desc">Returns a full record of each visit including customer name, pet details, service type, stay duration, and final payment, ordered by most recent check-in.</p>
+      <pre><code><span class="kw">SELECT</span>
+    c.customer_fname <span class="kw">||</span> <span class="st">' '</span> <span class="kw">||</span> c.customer_lname <span class="kw">AS</span> customer_name,
+    p.pet_name,
+    p.pet_breed,
+    s.service_type,
+    v.visit_check_in_date,
+    v.visit_check_out_date,
+    v.visit_days_stayed,
+    pay.payment_final_price
+<span class="kw">FROM</span> customer c
+<span class="kw">JOIN</span> pet p <span class="kw">ON</span> c.customer_id = p.customer_id
+<span class="kw">JOIN</span> visit v <span class="kw">ON</span> p.pet_id = v.pet_id
+<span class="kw">JOIN</span> service s <span class="kw">ON</span> v.service_id = s.service_id
+<span class="kw">JOIN</span> payment pay <span class="kw">ON</span> v.visit_id = pay.visit_id
+<span class="kw">ORDER BY</span> v.visit_check_in_date <span class="kw">DESC</span>;</code></pre>
+    </div>
+
+    <div class="query-block">
+      <div class="query-header">
+        <h3 class="query-title" style="color: var(--cream);">Sitter Performance by Revenue</h3>
+        <span class="query-tag">GROUP BY</span>
+      </div>
+      <p class="query-desc">Ranks sitters by total revenue generated, showing visit count and average payment per visit alongside facility assignment.</p>
+      <pre><code><span class="kw">SELECT</span>
+    sit.sitter_fname <span class="kw">||</span> <span class="st">' '</span> <span class="kw">||</span> sit.sitter_lname <span class="kw">AS</span> sitter_name,
+    f.facility_name,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> a.visit_id) <span class="kw">AS</span> total_visits,
+    <span class="fn">SUM</span>(pay.payment_final_price) <span class="kw">AS</span> total_revenue,
+    <span class="fn">AVG</span>(pay.payment_final_price) <span class="kw">AS</span> avg_payment
+<span class="kw">FROM</span> sitter sit
+<span class="kw">JOIN</span> assignment a <span class="kw">ON</span> sit.sitter_id = a.sitter_id
+<span class="kw">JOIN</span> visit v <span class="kw">ON</span> a.visit_id = v.visit_id
+<span class="kw">JOIN</span> payment pay <span class="kw">ON</span> v.visit_id = pay.visit_id
+<span class="kw">JOIN</span> facility f <span class="kw">ON</span> sit.sitter_facility_id = f.facility_id
+<span class="kw">GROUP BY</span> sit.sitter_id, f.facility_name
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>;</code></pre>
+    </div>
+
+    <div class="query-block">
+      <div class="query-header">
+        <h3 class="query-title" style="color: var(--cream);">Facility Performance Summary</h3>
+        <span class="query-tag">AGGREGATION</span>
+      </div>
+      <p class="query-desc">Compares facilities by total visits, unique pets served, revenue, and average stay duration to identify top-performing locations.</p>
+      <pre><code><span class="kw">SELECT</span>
+    f.facility_name,
+    f.facility_state,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> v.visit_id) <span class="kw">AS</span> total_visits,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> p.pet_id) <span class="kw">AS</span> unique_pets,
+    <span class="fn">SUM</span>(pay.payment_final_price) <span class="kw">AS</span> total_revenue,
+    <span class="fn">AVG</span>(v.visit_days_stayed) <span class="kw">AS</span> avg_stay_duration
+<span class="kw">FROM</span> facility f
+<span class="kw">JOIN</span> visit v <span class="kw">ON</span> f.facility_id = v.facility_id
+<span class="kw">JOIN</span> pet p <span class="kw">ON</span> v.pet_id = p.pet_id
+<span class="kw">JOIN</span> payment pay <span class="kw">ON</span> v.visit_id = pay.visit_id
+<span class="kw">GROUP BY</span> f.facility_id
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>;</code></pre>
+    </div>
+
+    <div class="query-block">
+      <div class="query-header">
+        <h3 class="query-title" style="color: var(--cream);">Customer Type Analysis</h3>
+        <span class="query-tag">GROUP BY</span>
+      </div>
+      <p class="query-desc">Segments customers by type to compare visit frequency, total spend, average payment per visit, and loyalty points earned.</p>
+      <pre><code><span class="kw">SELECT</span>
+    c.customer_type,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> c.customer_id) <span class="kw">AS</span> customer_count,
+    <span class="fn">COUNT</span>(v.visit_id) <span class="kw">AS</span> total_visits,
+    <span class="fn">SUM</span>(pay.payment_final_price) <span class="kw">AS</span> total_spent,
+    <span class="fn">AVG</span>(pay.payment_final_price) <span class="kw">AS</span> avg_per_visit,
+    <span class="fn">SUM</span>(pay.payment_loyalty_points) <span class="kw">AS</span> total_loyalty_points
+<span class="kw">FROM</span> customer c
+<span class="kw">JOIN</span> pet p <span class="kw">ON</span> c.customer_id = p.customer_id
+<span class="kw">JOIN</span> visit v <span class="kw">ON</span> p.pet_id = v.pet_id
+<span class="kw">JOIN</span> payment pay <span class="kw">ON</span> v.visit_id = pay.visit_id
+<span class="kw">GROUP BY</span> c.customer_type;</code></pre>
+    </div>
+
+    <div class="query-block">
+      <div class="query-header">
+        <h3 class="query-title" style="color: var(--cream);">Service Demand and Promo Usage</h3>
+        <span class="query-tag">CASE WHEN</span>
+      </div>
+      <p class="query-desc">Ranks services by total revenue, comparing base price to actual average price and tracking promotional code usage per service type.</p>
+      <pre><code><span class="kw">SELECT</span>
+    s.service_type,
+    <span class="fn">COUNT</span>(v.visit_id) <span class="kw">AS</span> bookings,
+    s.service_base_price,
+    <span class="fn">SUM</span>(pay.payment_final_price) <span class="kw">AS</span> total_revenue,
+    <span class="fn">AVG</span>(pay.payment_final_price) <span class="kw">AS</span> avg_actual_price,
+    <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> pay.payment_promo_code <span class="kw">IS NOT NULL THEN</span> 1 <span class="kw">END</span>) <span class="kw">AS</span> promo_usage_count
+<span class="kw">FROM</span> service s
+<span class="kw">JOIN</span> visit v <span class="kw">ON</span> s.service_id = v.service_id
+<span class="kw">JOIN</span> payment pay <span class="kw">ON</span> v.visit_id = pay.visit_id
+<span class="kw">GROUP BY</span> s.service_id
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>;</code></pre>
+    </div>
+  </div>
+
+  <div class="back-bar">
+    <a href="work.html" class="back-link">← Back to Work</a>
+    <a href="index.html#contact" class="back-link">Get in Touch →</a>
+  </div>
+
+</body>
+</html>
